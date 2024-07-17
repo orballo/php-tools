@@ -1,0 +1,14 @@
+[workspace]
+members  = ["packages/parser"]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+authors = ["Eduardo Campaña <hi@orballo.dev>"]
+edition = "2021"
+license = "MIT"
+
+[workspace.dependencies]
+pest        = "2.7.11"
+pest_derive = "2.7.11"
+rowan       = "0.15.15"
