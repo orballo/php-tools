@@ -1,14 +1,15 @@
 use pest::Parser;
 use pest_derive::Parser;
+use std::fs;
 
 #[derive(Parser)]
-#[grammar = "csv.pest"]
+#[grammar = "grammar/base.pest"]
 pub struct CSVParser {}
 
 pub fn main() {
-    let successful_parse = CSVParser::parse(Rule::field, "-273.15");
-    eprintln!("successful_parse = {:#?}", successful_parse);
+    let file_content = fs::read_to_string("packages/parser/src/fixtures/hello-world.php")
+        .expect("Failed to read the file");
+    let file = CSVParser::parse(Rule::FILE, &file_content).expect("Failed to parse");
 
-    let unsuccessful_parse = CSVParser::parse(Rule::field, "this is not a number");
-    eprintln!("unsuccessful_parse = {:#?}", unsuccessful_parse);
+    eprintln!("file = {:#?}", file);
 }

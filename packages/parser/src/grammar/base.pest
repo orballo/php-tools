@@ -1,0 +1,7 @@
+FILE            = { SOI ~ SCRIPT ~ EOI }
+SCRIPT          = { SCRIPT_SECTION+ }
+SCRIPT_SECTION  = { OPT_TEXT ~ START_TAG ~ SECTION_CONTENT ~ END_TAG? ~ OPT_TEXT }
+SECTION_CONTENT = { (!END_TAG ~ ANY)* }
+START_TAG       = { "<?php" | "<?=" }
+END_TAG         = { "?>" }
+OPT_TEXT        = { (!START_TAG ~ ANY)* }

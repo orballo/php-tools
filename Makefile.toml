@@ -1,0 +1,6 @@
+[config]
+default_to_workspace = false
+
+[tasks.parser]
+command = "cargo"
+args    = ["run", "--package", "parser"]

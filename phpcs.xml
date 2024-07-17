@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<ruleset name="PHP Tools">
+	<rule ref="PSR12" />
+	<description>Sniffs for PHP Tools</description>
+	<exclude-pattern>./vendor/*</exclude-pattern>
+	<exclude-pattern>./node_modules/*</exclude-pattern>
+	<exclude-pattern>./dist/*</exclude-pattern>
+	<exclude-pattern>./packages/parser/src/fixtures/*</exclude-pattern>
+</ruleset>

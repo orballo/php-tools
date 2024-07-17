@@ -1,5 +1,5 @@
 [package]
-name              = "php-parser"
+name              = "parser"
 version.workspace = true
 authors.workspace = true
 edition.workspace = true
