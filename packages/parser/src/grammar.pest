@@ -1,6 +1,8 @@
 // Root
 
-FILE = { SOI ~ INPUT_FILE ~ EOI }
+FILE = { SOI ~ SCRIPT ~ EOI }
+
+// ***  LEXICAL GRAMMAR *** //
 
 // Input
 
@@ -46,62 +48,7 @@ NAMESPACE_NAME_AS_A_PREFIX =  {
 QUALIFIED_NAME             =  { NAMESPACE_NAME_AS_A_PREFIX? ~ NAME }
 NAME                       =  { NAME_NONDIGIT ~ (NAME_NONDIGIT | DIGIT)* }
 NAME_NONDIGIT              = _{ NONDIGIT | '\u{80}'..'\u{FF}' }
-NONDIGIT                   = _{ ASCII_ALPHA | "_" }
-
-// Literals
-
-INTEGER_LITERAL     = {
-    DECIMAL_LITERAL
-  | OCTAL_LITERAL
-  | HEXADECIMAL_LITERAL
-  | BINARY_LITERAL
-}
-DECIMAL_LITERAL     = { NONZERO_DIGIT ~ DIGIT* }
-OCTAL_LITERAL       = { "0" ~ OCTAL_DIGIT+ }
-HEXADECIMAL_LITERAL = { "0" ~ ^"x" ~ HEXADECIMAL_DIGIT+ }
-BINARY_LITERAL      = { "0" ~ ^"b" ~ BINARY_DIGIT+ }
-
-DIGIT             = _{ ASCII_DIGIT }
-NONZERO_DIGIT     = _{ ASCII_NONZERO_DIGIT }
-OCTAL_DIGIT       = _{ ASCII_OCT_DIGIT }
-HEXADECIMAL_DIGIT = _{ ASCII_HEX_DIGIT }
-BINARY_DIGIT      = _{ ASCII_BIN_DIGIT }
-
-FLOATING_LITERAL   =  { (FRACTIONAL_LITERAL ~ EXPONENT_PART?) | (DIGIT+ ~ EXPONENT_PART) }
-FRACTIONAL_LITERAL =  { (DIGIT* ~ "." ~ DIGIT+) | (DIGIT+ ~ ".") }
-EXPONENT_PART      = _{ ^"e" ~ SIGN? ~ DIGIT+ }
-SIGN               =  { SIGN_PLUS | SIGN_MINUS }
-SIGN_PLUS          =  { "+" }
-SIGN_MINUS         =  { "-" }
-
-STRING_LITERAL = {
-    SINGLE_QUOTED_STRING_LITERAL
-  | DOUBLE_QUOTED_STRING_LITERAL
-  | HEREDOC_STRING_LITERAL
-  | NOWDOC_STRING_LITERAL
-}
-
-SINGLE_QUOTED_STRING_LITERAL  = { BINARY_PREFIX? ~ "'" ~ SINGLE_QUOTED_CHARACTER* ~ "'" }
-SINGLE_QUOTED_CHARACTER       = { SINGLE_QUOTED_ESCAPE_SEQUENCE | !("'" | "\\") ~ ANY }
-SINGLE_QUOTED_ESCAPE_SEQUENCE = { "\\'" | "\\\\" }
-BINARY_PREFIX                 = { ^"b" }
-
-DOUBLE_QUOTED_STRING_LITERAL              =  { BINARY_PREFIX? ~ "\"" ~ DOUBLE_QUOTED_CHARACTER* ~ "\"" }
-DOUBLE_QUOTED_CHARACTER                   =  {
-    DOUBLE_QUOTED_ESCAPE_SEQUENCE
-  | !("\"" | "\\") ~ ANY
-  | "\\" ~ !("\"" | "\\" | "$" | "e" | "f" | "n" | "r" | "t" | "v" | ^"x" | OCTAL_DIGIT) ~ ANY
-}
-DOUBLE_QUOTED_ESCAPE_SEQUENCE             =  {
-    DOUBLE_QUOTED_SIMPLE_ESCAPE_SEQUENCE
-  | DOUBLE_QUOTED_OCTAL_ESCAPE_SEQUENCE
-  | DOUBLE_QUOTED_HEXADECIMAL_ESCAPE_SEQUENCE
-  | DOUBLE_QUOTED_UNICODE_ESCAPE_SEQUENCE
-}
-DOUBLE_QUOTED_SIMPLE_ESCAPE_SEQUENCE      = _{ "\\\"" | "\\\\" | "\\$" | "\\e" | "\\f" | "\\n" | "\\r" | "\\t" | "\\v" }
-DOUBLE_QUOTED_OCTAL_ESCAPE_SEQUENCE       = _{ "\\" ~ OCTAL_DIGIT{1, 3} }
-DOUBLE_QUOTED_HEXADECIMAL_ESCAPE_SEQUENCE = _{ "\\" ~ ^"x" ~ HEXADECIMAL_DIGIT{1, 2} }
-DOUBLE_QUOTED_UNICODE_ESCAPE_SEQUENCE     = _{ "\\u" ~ "{" ~ HEXADECIMAL_DIGIT+ ~ "}" }
+NONDIGIT                   = _{ "_" | ASCII_ALPHA }
 
 // Keywords
 
@@ -242,16 +189,217 @@ KEYWORD_XOR          = { "xor" }
 KEYWORD_YIELD        = { "yield" }
 KEYWORD_YIELD_FROM   = { "yield from" }
 
-// SCRIPT          = { SCRIPT_SECTION+ }
-// SCRIPT_SECTION  = { OPT_TEXT ~ START_TAG ~ SECTION_CONTENT ~ END_TAG? ~ OPT_TEXT }
-// SECTION_CONTENT = { (!END_TAG ~ ANY)* }
-// START_TAG       = { "<?php" | "<?=" }
-// END_TAG         = { "?>" }
-// OPT_TEXT        = { (!START_TAG ~ ANY)* }
+// Integer Literal
+
+INTEGER_LITERAL     = {
+    DECIMAL_LITERAL
+  | OCTAL_LITERAL
+  | HEXADECIMAL_LITERAL
+  | BINARY_LITERAL
+}
+DECIMAL_LITERAL     = { NONZERO_DIGIT ~ DIGIT* }
+OCTAL_LITERAL       = { "0" ~ OCTAL_DIGIT+ }
+HEXADECIMAL_LITERAL = { "0" ~ ^"x" ~ HEXADECIMAL_DIGIT+ }
+BINARY_LITERAL      = { "0" ~ ^"b" ~ BINARY_DIGIT+ }
+
+DIGIT             = _{ ASCII_DIGIT }
+NONZERO_DIGIT     = _{ ASCII_NONZERO_DIGIT }
+OCTAL_DIGIT       = _{ ASCII_OCT_DIGIT }
+HEXADECIMAL_DIGIT = _{ ASCII_HEX_DIGIT }
+BINARY_DIGIT      = _{ ASCII_BIN_DIGIT }
+
+// Floating Literal
+
+FLOATING_LITERAL   =  { (FRACTIONAL_LITERAL ~ EXPONENT_PART?) | (DIGIT+ ~ EXPONENT_PART) }
+FRACTIONAL_LITERAL =  { (DIGIT* ~ "." ~ DIGIT+) | (DIGIT+ ~ ".") }
+EXPONENT_PART      = _{ ^"e" ~ SIGN? ~ DIGIT+ }
+SIGN               =  { SIGN_PLUS | SIGN_MINUS }
+SIGN_PLUS          =  { "+" }
+SIGN_MINUS         =  { "-" }
+
+// String Literal
+
+STRING_LITERAL                            =  {
+    SINGLE_QUOTED_STRING_LITERAL
+  | DOUBLE_QUOTED_STRING_LITERAL
+  | HEREDOC_STRING_LITERAL
+  | NOWDOC_STRING_LITERAL
+}
+SINGLE_QUOTED_STRING_LITERAL              =  { BINARY_PREFIX? ~ "'" ~ SINGLE_QUOTED_CHARACTER* ~ "'" }
+SINGLE_QUOTED_CHARACTER                   =  { SINGLE_QUOTED_ESCAPE_SEQUENCE | !("'" | "\\") ~ ANY }
+SINGLE_QUOTED_ESCAPE_SEQUENCE             =  { "\\'" | "\\\\" }
+BINARY_PREFIX                             =  { ^"b" }
+DOUBLE_QUOTED_STRING_LITERAL              =  { BINARY_PREFIX? ~ "\"" ~ DOUBLE_QUOTED_CHARACTER* ~ "\"" }
+DOUBLE_QUOTED_CHARACTER                   =  {
+    DOUBLE_QUOTED_ESCAPE_SEQUENCE
+  | !("\"" | "\\") ~ ANY
+  | "\\" ~ !("\"" | "\\" | "$" | "e" | "f" | "n" | "r" | "t" | "v" | ^"x" | OCTAL_DIGIT) ~ ANY
+}
+DOUBLE_QUOTED_ESCAPE_SEQUENCE             =  {
+    DOUBLE_QUOTED_SIMPLE_ESCAPE_SEQUENCE
+  | DOUBLE_QUOTED_OCTAL_ESCAPE_SEQUENCE
+  | DOUBLE_QUOTED_HEXADECIMAL_ESCAPE_SEQUENCE
+  | DOUBLE_QUOTED_UNICODE_ESCAPE_SEQUENCE
+}
+DOUBLE_QUOTED_SIMPLE_ESCAPE_SEQUENCE      = _{ "\\\"" | "\\\\" | "\\$" | "\\e" | "\\f" | "\\n" | "\\r" | "\\t" | "\\v" }
+DOUBLE_QUOTED_OCTAL_ESCAPE_SEQUENCE       = _{ "\\" ~ OCTAL_DIGIT{1, 3} }
+DOUBLE_QUOTED_HEXADECIMAL_ESCAPE_SEQUENCE = _{ "\\" ~ ^"x" ~ HEXADECIMAL_DIGIT{1, 2} }
+DOUBLE_QUOTED_UNICODE_ESCAPE_SEQUENCE     = _{ "\\u" ~ "{" ~ HEXADECIMAL_DIGIT+ ~ "}" }
+STRING_VARIABLE                           =  {
+    VARIABLE_NAME ~ OFFSET_OR_PROPERTY?
+  | "{$" ~ EXPRESSION ~ "}"
+}
+OFFSET_OR_PROPERTY                        =  { OFFSET_IN_STRING | PROPERTY_IN_STRING }
+OFFSET_IN_STRING                          =  { "[" ~ (NAME | VARIABLE_NAME | INTEGER_LITERAL) ~ "]" }
+PROPERTY_IN_STRING                        =  { "->" ~ NAME }
+HEREDOC_STRING_LITERAL                    =  { BINARY_PREFIX? ~ "<<<" ~ HEREDOC_START_IDENTIFIER ~ NEW_LINE ~ HEREDOC_BODY? ~ HEREDOC_END_IDENTIFIER ~ ";"? ~ NEW_LINE }
+HEREDOC_START_IDENTIFIER                  =  { NAME | ("\"") ~ NAME ~ ("\"") }
+HEREDOC_END_IDENTIFIER                    =  { NAME }
+HEREDOC_BODY                              =  { HEREDOC_CHAR* ~ NEW_LINE }
+HEREDOC_CHAR                              = _{
+    HEREDOC_ESCAPE_SEQUENCE
+  | !"\\" ~ ANY
+  | "\\" ~ !("\\" | "$" | "e" | "f" | "n" | "r" | "t" | "v" | ^"x" | OCTAL_DIGIT) ~ ANY
+}
+HEREDOC_ESCAPE_SEQUENCE                   =  {
+    HEREDOC_SIMPLE_ESCAPE_SEQUENCE
+  | DOUBLE_QUOTED_OCTAL_ESCAPE_SEQUENCE
+  | DOUBLE_QUOTED_HEXADECIMAL_ESCAPE_SEQUENCE
+  | DOUBLE_QUOTED_UNICODE_ESCAPE_SEQUENCE
+}
+HEREDOC_SIMPLE_ESCAPE_SEQUENCE            = _{ "\\\\" | "\\$" | "\\e" | "\\f" | "\\n" | "\\r" | "\\t" | "\\v" }
+NOWDOC_STRING_LITERAL                     =  { BINARY_PREFIX? ~ "<<<" ~ "'" ~ NAME ~ "'" ~ NEW_LINE ~ HEREDOC_BODY? ~ NAME ~ ";"? ~ NEW_LINE }
+
+// Operators and Punctuators
+
+OPERATOR_OR_PUNCTUATOR                  = _{ OPERATOR | PUNCTUATOR }
+OPERATOR                                = _{
+    OPERATOR_DOT
+  | OPERATOR_OBJECT
+  | OPERATOR_INCREMENT
+  | OPERATOR_DECREMENT
+  | OPERATOR_EXPONENTIATION
+  | OPERATOR_MULTIPLICATION
+  | OPERATOR_ADDITION
+  | OPERATOR_SUBTRACTION
+  | OPERATOR_BITWISE_NOT
+  | OPERATOR_LOGICAL_NOT
+  | OPERATOR_DIVISION
+  | OPERATOR_MODULUS
+  | OPERATOR_BITWISE_LEFT_SHIFT
+  | OPERATOR_BITWISE_RIGHT_SHIFT
+  | OPERATOR_LESS_THAN
+  | OPERATOR_GREATER_THAN
+  | OPERATOR_LESS_THAN_OR_EQUAL
+  | OPERATOR_GREATER_THAN_OR_EQUAL
+  | OPERATOR_EQUALITY
+  | OPERATOR_IDENTITY
+  | OPERATOR_INEQUALITY
+  | OPERATOR_NON_IDENTITY
+  | OPERATOR_BITWISE_XOR
+  | OPERATOR_BITWISE_OR
+  | OPERATOR_BITWISE_AND
+  | OPERATOR_LOGICAL_AND
+  | OPERATOR_LOGICAL_OR
+  | OPERATOR_TERNARY_CONDITION
+  | OPERATOR_TERNARY_SEPARATOR
+  | OPERATOR_ASSIGNMENT
+  | OPERATOR_EXPONENTIATION_ASSIGNMENT
+  | OPERATOR_MULTIPLICATION_ASSIGNMENT
+  | OPERATOR_DIVISION_ASSIGNMENT
+  | OPERATOR_MODULUS_ASSIGNMENT
+  | OPERATOR_ADDITION_ASSIGNMENT
+  | OPERATOR_SUBTRACTION_ASSIGNMENT
+  | OPERATOR_CONCATENATION_ASSIGNMENT
+  | OPERATOR_BITWISE_LEFT_SHIFT_ASSIGNMENT
+  | OPERATOR_BITWISE_RIGHT_SHIFT_ASSIGNMENT
+  | OPERATOR_BITWISE_AND_ASSIGNMENT
+  | OPERATOR_BITWISE_XOR_ASSIGNMENT
+  | OPERATOR_BITWISE_OR_ASSIGNMENT
+  | OPERATOR_COMMA
+  | OPERATOR_NULL_COALESCING
+  | OPERATOR_SPACESHIP
+  | OPERATOR_ELLIPSIS
+}
+OPERATOR_DOT                            =  { "." }
+OPERATOR_OBJECT                         =  { "->" }
+OPERATOR_INCREMENT                      =  { "++" }
+OPERATOR_DECREMENT                      =  { "--" }
+OPERATOR_EXPONENTIATION                 =  { "**" }
+OPERATOR_MULTIPLICATION                 =  { "*" }
+OPERATOR_ADDITION                       =  { "+" }
+OPERATOR_SUBTRACTION                    =  { "-" }
+OPERATOR_BITWISE_NOT                    =  { "~" }
+OPERATOR_LOGICAL_NOT                    =  { "!" }
+OPERATOR_DIVISION                       =  { "/" }
+OPERATOR_MODULUS                        =  { "%" }
+OPERATOR_BITWISE_LEFT_SHIFT             =  { "<<" }
+OPERATOR_BITWISE_RIGHT_SHIFT            =  { ">>" }
+OPERATOR_LESS_THAN                      =  { "<" }
+OPERATOR_GREATER_THAN                   =  { ">" }
+OPERATOR_LESS_THAN_OR_EQUAL             =  { "<=" }
+OPERATOR_GREATER_THAN_OR_EQUAL          =  { ">=" }
+OPERATOR_EQUALITY                       =  { "==" }
+OPERATOR_IDENTITY                       =  { "===" }
+OPERATOR_INEQUALITY                     =  { "!=" }
+OPERATOR_NON_IDENTITY                   =  { "!==" }
+OPERATOR_BITWISE_XOR                    =  { "^" }
+OPERATOR_BITWISE_OR                     =  { "|" }
+OPERATOR_BITWISE_AND                    =  { "&" }
+OPERATOR_LOGICAL_AND                    =  { "&&" }
+OPERATOR_LOGICAL_OR                     =  { "||" }
+OPERATOR_TERNARY_CONDITION              =  { "?" }
+OPERATOR_TERNARY_SEPARATOR              =  { ":" }
+OPERATOR_ASSIGNMENT                     =  { "=" }
+OPERATOR_EXPONENTIATION_ASSIGNMENT      =  { "**=" }
+OPERATOR_MULTIPLICATION_ASSIGNMENT      =  { "*=" }
+OPERATOR_DIVISION_ASSIGNMENT            =  { "/=" }
+OPERATOR_MODULUS_ASSIGNMENT             =  { "%=" }
+OPERATOR_ADDITION_ASSIGNMENT            =  { "+=" }
+OPERATOR_SUBTRACTION_ASSIGNMENT         =  { "-=" }
+OPERATOR_CONCATENATION_ASSIGNMENT       =  { ".=" }
+OPERATOR_BITWISE_LEFT_SHIFT_ASSIGNMENT  =  { "<<=" }
+OPERATOR_BITWISE_RIGHT_SHIFT_ASSIGNMENT =  { ">>=" }
+OPERATOR_BITWISE_AND_ASSIGNMENT         =  { "&=" }
+OPERATOR_BITWISE_XOR_ASSIGNMENT         =  { "^=" }
+OPERATOR_BITWISE_OR_ASSIGNMENT          =  { "|=" }
+OPERATOR_COMMA                          =  { "," }
+OPERATOR_NULL_COALESCING                =  { "??" }
+OPERATOR_SPACESHIP                      =  { "<=>" }
+OPERATOR_ELLIPSIS                       =  { "..." }
+PUNCTUATOR                              = _{
+    PUNCTUATOR_LEFT_SQUARE_BRACKET
+  | PUNCTUATOR_RIGHT_SQUARE_BRACKET
+  | PUNCTUATOR_LEFT_PARENTHESIS
+  | PUNCTUATOR_RIGHT_PARENTHESIS
+  | PUNCTUATOR_LEFT_CURLY_BRACE
+  | PUNCTUATOR_RIGHT_CURLY_BRACE
+  | PUNCTUATOR_VARIABLE_SYMBOL
+  | PUNCTUATOR_STATEMENT_TERMINATOR
+  | PUNCTUATOR_NAMESPACE_SEPARATOR
+}
+PUNCTUATOR_LEFT_SQUARE_BRACKET          =  { "[" }
+PUNCTUATOR_RIGHT_SQUARE_BRACKET         =  { "]" }
+PUNCTUATOR_LEFT_PARENTHESIS             =  { "(" }
+PUNCTUATOR_RIGHT_PARENTHESIS            =  { ")" }
+PUNCTUATOR_LEFT_CURLY_BRACE             =  { "{" }
+PUNCTUATOR_RIGHT_CURLY_BRACE            =  { "}" }
+PUNCTUATOR_VARIABLE_SYMBOL              =  { "$" }
+PUNCTUATOR_STATEMENT_TERMINATOR         =  { ";" }
+PUNCTUATOR_NAMESPACE_SEPARATOR          =  { "\\" }
+
+// ***  SYNTATIC GRAMMAR *** //
 
 // Basics
 
-// Scalar Types
+SCRIPT          = { SCRIPT_SECTION+ }
+SCRIPT_SECTION  = { TEXT ~ START_TAG ~ SECTION_CONTENT ~ END_TAG? ~ TEXT }
+SECTION_CONTENT = { (!END_TAG ~ ANY)* }
+START_TAG       = { "<?php" | "<?=" }
+END_TAG         = { "?>" }
+TEXT            = { (!START_TAG ~ ANY)* }
+
+// Variables
 
 // TYPE_SCALAR  = { TYPE_BOOLEAN | TYPE_INTEGER | TYPE_FLOAT | TYPE_STRING | TYPE_NULL }
 // TYPE_BOOLEAN = { "bool" | "boolean" }
