@@ -1,7 +1,290 @@
-FILE            = { SOI ~ SCRIPT ~ EOI }
-SCRIPT          = { SCRIPT_SECTION+ }
-SCRIPT_SECTION  = { OPT_TEXT ~ START_TAG ~ SECTION_CONTENT ~ END_TAG? ~ OPT_TEXT }
-SECTION_CONTENT = { (!END_TAG ~ ANY)* }
-START_TAG       = { "<?php" | "<?=" }
-END_TAG         = { "?>" }
-OPT_TEXT        = { (!START_TAG ~ ANY)* }
+// Root
+
+FILE = { SOI ~ INPUT_FILE ~ EOI }
+
+// Input
+
+INPUT_FILE       =  { INPUT_ELEMENT+ }
+INPUT_ELEMENT    = _{ COMMENT | WHITE_SPACE | TOKEN }
+INPUT_CHARACTERS = _{ INPUT_CHARACTER+ }
+INPUT_CHARACTER  = _{ (!NEW_LINE ~ ANY) }
+
+// Comments
+
+COMMENT             = _{ SINGLE_LINE_COMMENT | DELIMITED_COMMENT }
+SINGLE_LINE_COMMENT = _{ "//" ~ INPUT_CHARACTERS? }
+DELIMITED_COMMENT   = _{ "/*" ~ (!"*/" ~ ANY)* ~ "*/" }
+
+// Whitespace
+
+WHITE_SPACE           = _{ WHITE_SPACE_CHARACTER+ }
+WHITE_SPACE_CHARACTER = _{ NEW_LINE | " " | "\t" }
+NEW_LINE              = _{ "\r" | "\n" | "\r\n" }
+
+// Tokens
+
+TOKEN = {
+    VARIABLE_NAME
+  | NAME
+  | KEYWORD
+  | INTEGER_LITERAL
+  | FLOATING_LITERAL
+  | STRING_LITERAL
+  | OPERATOR_OR_PUNCTUATOR
+}
+
+// Names
+
+VARIABLE_NAME              =  { "$" ~ NAME }
+NAMESPACE_NAME             =  { NAME ~ (("\\" ~ NAME)*)? }
+NAMESPACE_NAME_AS_A_PREFIX =  {
+    "\\"
+  | ("\\"? ~ NAMESPACE_NAME ~ "\\")
+  | (KEYWORD_NAMESPACE ~ "\\")
+  | (KEYWORD_NAMESPACE ~ "\\" ~ NAMESPACE_NAME ~ "\\")
+}
+QUALIFIED_NAME             =  { NAMESPACE_NAME_AS_A_PREFIX? ~ NAME }
+NAME                       =  { NAME_NONDIGIT ~ (NAME_NONDIGIT | DIGIT)* }
+NAME_NONDIGIT              = _{ NONDIGIT | '\u{80}'..'\u{FF}' }
+NONDIGIT                   = _{ ASCII_ALPHA | "_" }
+
+// Literals
+
+INTEGER_LITERAL     = {
+    DECIMAL_LITERAL
+  | OCTAL_LITERAL
+  | HEXADECIMAL_LITERAL
+  | BINARY_LITERAL
+}
+DECIMAL_LITERAL     = { NONZERO_DIGIT ~ DIGIT* }
+OCTAL_LITERAL       = { "0" ~ OCTAL_DIGIT+ }
+HEXADECIMAL_LITERAL = { "0" ~ ^"x" ~ HEXADECIMAL_DIGIT+ }
+BINARY_LITERAL      = { "0" ~ ^"b" ~ BINARY_DIGIT+ }
+
+DIGIT             = _{ ASCII_DIGIT }
+NONZERO_DIGIT     = _{ ASCII_NONZERO_DIGIT }
+OCTAL_DIGIT       = _{ ASCII_OCT_DIGIT }
+HEXADECIMAL_DIGIT = _{ ASCII_HEX_DIGIT }
+BINARY_DIGIT      = _{ ASCII_BIN_DIGIT }
+
+FLOATING_LITERAL   =  { (FRACTIONAL_LITERAL ~ EXPONENT_PART?) | (DIGIT+ ~ EXPONENT_PART) }
+FRACTIONAL_LITERAL =  { (DIGIT* ~ "." ~ DIGIT+) | (DIGIT+ ~ ".") }
+EXPONENT_PART      = _{ ^"e" ~ SIGN? ~ DIGIT+ }
+SIGN               =  { SIGN_PLUS | SIGN_MINUS }
+SIGN_PLUS          =  { "+" }
+SIGN_MINUS         =  { "-" }
+
+STRING_LITERAL = {
+    SINGLE_QUOTED_STRING_LITERAL
+  | DOUBLE_QUOTED_STRING_LITERAL
+  | HEREDOC_STRING_LITERAL
+  | NOWDOC_STRING_LITERAL
+}
+
+SINGLE_QUOTED_STRING_LITERAL  = { BINARY_PREFIX? ~ "'" ~ SINGLE_QUOTED_CHARACTER* ~ "'" }
+SINGLE_QUOTED_CHARACTER       = { SINGLE_QUOTED_ESCAPE_SEQUENCE | !("'" | "\\") ~ ANY }
+SINGLE_QUOTED_ESCAPE_SEQUENCE = { "\\'" | "\\\\" }
+BINARY_PREFIX                 = { ^"b" }
+
+DOUBLE_QUOTED_STRING_LITERAL              =  { BINARY_PREFIX? ~ "\"" ~ DOUBLE_QUOTED_CHARACTER* ~ "\"" }
+DOUBLE_QUOTED_CHARACTER                   =  {
+    DOUBLE_QUOTED_ESCAPE_SEQUENCE
+  | !("\"" | "\\") ~ ANY
+  | "\\" ~ !("\"" | "\\" | "$" | "e" | "f" | "n" | "r" | "t" | "v" | ^"x" | OCTAL_DIGIT) ~ ANY
+}
+DOUBLE_QUOTED_ESCAPE_SEQUENCE             =  {
+    DOUBLE_QUOTED_SIMPLE_ESCAPE_SEQUENCE
+  | DOUBLE_QUOTED_OCTAL_ESCAPE_SEQUENCE
+  | DOUBLE_QUOTED_HEXADECIMAL_ESCAPE_SEQUENCE
+  | DOUBLE_QUOTED_UNICODE_ESCAPE_SEQUENCE
+}
+DOUBLE_QUOTED_SIMPLE_ESCAPE_SEQUENCE      = _{ "\\\"" | "\\\\" | "\\$" | "\\e" | "\\f" | "\\n" | "\\r" | "\\t" | "\\v" }
+DOUBLE_QUOTED_OCTAL_ESCAPE_SEQUENCE       = _{ "\\" ~ OCTAL_DIGIT{1, 3} }
+DOUBLE_QUOTED_HEXADECIMAL_ESCAPE_SEQUENCE = _{ "\\" ~ ^"x" ~ HEXADECIMAL_DIGIT{1, 2} }
+DOUBLE_QUOTED_UNICODE_ESCAPE_SEQUENCE     = _{ "\\u" ~ "{" ~ HEXADECIMAL_DIGIT+ ~ "}" }
+
+// Keywords
+
+KEYWORD              = {
+    KEYWORD_ABSTRACT
+  | KEYWORD_AND
+  | KEYWORD_ARRAY
+  | KEYWORD_AS
+  | KEYWORD_BREAK
+  | KEYWORD_CALLABLE
+  | KEYWORD_CASE
+  | KEYWORD_CATCH
+  | KEYWORD_CLASS
+  | KEYWORD_CLONE
+  | KEYWORD_CONST
+  | KEYWORD_CONTINUE
+  | KEYWORD_DECLARE
+  | KEYWORD_DEFAULT
+  | KEYWORD_DIE
+  | KEYWORD_DO
+  | KEYWORD_ECHO
+  | KEYWORD_ELSE
+  | KEYWORD_ELSEIF
+  | KEYWORD_EMPTY
+  | KEYWORD_ENDDECLARE
+  | KEYWORD_ENDFOR
+  | KEYWORD_ENDFOREACH
+  | KEYWORD_ENDIF
+  | KEYWORD_ENDSWITCH
+  | KEYWORD_ENDWHILE
+  | KEYWORD_EVAL
+  | KEYWORD_EXIT
+  | KEYWORD_EXTENDS
+  | KEYWORD_FINAL
+  | KEYWORD_FINALLY
+  | KEYWORD_FOR
+  | KEYWORD_FOREACH
+  | KEYWORD_FUNCTION
+  | KEYWORD_GLOBAL
+  | KEYWORD_GOTO
+  | KEYWORD_IF
+  | KEYWORD_IMPLEMENTS
+  | KEYWORD_INCLUDE
+  | KEYWORD_INCLUDE_ONCE
+  | KEYWORD_INSTANCEOF
+  | KEYWORD_INSTEADOF
+  | KEYWORD_INTERFACE
+  | KEYWORD_ISSET
+  | KEYWORD_LIST
+  | KEYWORD_NAMESPACE
+  | KEYWORD_NEW
+  | KEYWORD_OR
+  | KEYWORD_PRINT
+  | KEYWORD_PRIVATE
+  | KEYWORD_PROTECTED
+  | KEYWORD_PUBLIC
+  | KEYWORD_REQUIRE
+  | KEYWORD_REQUIRE_ONCE
+  | KEYWORD_RETURN
+  | KEYWORD_STATIC
+  | KEYWORD_SWITCH
+  | KEYWORD_THROW
+  | KEYWORD_TRAIT
+  | KEYWORD_TRY
+  | KEYWORD_UNSET
+  | KEYWORD_USE
+  | KEYWORD_VAR
+  | KEYWORD_WHILE
+  | KEYWORD_XOR
+  | KEYWORD_YIELD
+  | KEYWORD_YIELD_FROM
+}
+KEYWORD_ABSTRACT     = { "abstract" }
+KEYWORD_AND          = { "and" }
+KEYWORD_ARRAY        = { "array" }
+KEYWORD_AS           = { "as" }
+KEYWORD_BREAK        = { "break" }
+KEYWORD_CALLABLE     = { "callable" }
+KEYWORD_CASE         = { "case" }
+KEYWORD_CATCH        = { "catch" }
+KEYWORD_CLASS        = { "class" }
+KEYWORD_CLONE        = { "clone" }
+KEYWORD_CONST        = { "const" }
+KEYWORD_CONTINUE     = { "continue" }
+KEYWORD_DECLARE      = { "declare" }
+KEYWORD_DEFAULT      = { "default" }
+KEYWORD_DIE          = { "die" }
+KEYWORD_DO           = { "do" }
+KEYWORD_ECHO         = { "echo" }
+KEYWORD_ELSE         = { "else" }
+KEYWORD_ELSEIF       = { "elseif" }
+KEYWORD_EMPTY        = { "empty" }
+KEYWORD_ENDDECLARE   = { "enddeclare" }
+KEYWORD_ENDFOR       = { "endfor" }
+KEYWORD_ENDFOREACH   = { "endforeach" }
+KEYWORD_ENDIF        = { "endif" }
+KEYWORD_ENDSWITCH    = { "endswitch" }
+KEYWORD_ENDWHILE     = { "endwhile" }
+KEYWORD_EVAL         = { "eval" }
+KEYWORD_EXIT         = { "exit" }
+KEYWORD_EXTENDS      = { "extends" }
+KEYWORD_FINAL        = { "final" }
+KEYWORD_FINALLY      = { "finally" }
+KEYWORD_FOR          = { "for" }
+KEYWORD_FOREACH      = { "foreach" }
+KEYWORD_FUNCTION     = { "function" }
+KEYWORD_GLOBAL       = { "global" }
+KEYWORD_GOTO         = { "goto" }
+KEYWORD_IF           = { "if" }
+KEYWORD_IMPLEMENTS   = { "implements" }
+KEYWORD_INCLUDE      = { "include" }
+KEYWORD_INCLUDE_ONCE = { "include_once" }
+KEYWORD_INSTANCEOF   = { "instanceof" }
+KEYWORD_INSTEADOF    = { "insteadof" }
+KEYWORD_INTERFACE    = { "interface" }
+KEYWORD_ISSET        = { "isset" }
+KEYWORD_LIST         = { "list" }
+KEYWORD_NAMESPACE    = { "namespace" }
+KEYWORD_NEW          = { "new" }
+KEYWORD_OR           = { "or" }
+KEYWORD_PRINT        = { "print" }
+KEYWORD_PRIVATE      = { "private" }
+KEYWORD_PROTECTED    = { "protected" }
+KEYWORD_PUBLIC       = { "public" }
+KEYWORD_REQUIRE      = { "require" }
+KEYWORD_REQUIRE_ONCE = { "require_once" }
+KEYWORD_RETURN       = { "return" }
+KEYWORD_STATIC       = { "static" }
+KEYWORD_SWITCH       = { "switch" }
+KEYWORD_THROW        = { "throw" }
+KEYWORD_TRAIT        = { "trait" }
+KEYWORD_TRY          = { "try" }
+KEYWORD_UNSET        = { "unset" }
+KEYWORD_USE          = { "use" }
+KEYWORD_VAR          = { "var" }
+KEYWORD_WHILE        = { "while" }
+KEYWORD_XOR          = { "xor" }
+KEYWORD_YIELD        = { "yield" }
+KEYWORD_YIELD_FROM   = { "yield from" }
+
+// SCRIPT          = { SCRIPT_SECTION+ }
+// SCRIPT_SECTION  = { OPT_TEXT ~ START_TAG ~ SECTION_CONTENT ~ END_TAG? ~ OPT_TEXT }
+// SECTION_CONTENT = { (!END_TAG ~ ANY)* }
+// START_TAG       = { "<?php" | "<?=" }
+// END_TAG         = { "?>" }
+// OPT_TEXT        = { (!START_TAG ~ ANY)* }
+
+// Basics
+
+// Scalar Types
+
+// TYPE_SCALAR  = { TYPE_BOOLEAN | TYPE_INTEGER | TYPE_FLOAT | TYPE_STRING | TYPE_NULL }
+// TYPE_BOOLEAN = { "bool" | "boolean" }
+// TYPE_INTEGER = { "int" | "integer" }
+// TYPE_FLOAT   = { "float" | "double" | "real" }
+// TYPE_STRING  = { "string" }
+// TYPE_NULL    = { "null" }
+
+// Compound Types
+
+/*
+    arrays
+    objects
+    resource
+*/
+
+// Strings
+
+/*
+    str-numeric::
+    str-whitespace(opt)   sign(opt)   str-number
+
+    str-whitespace::
+    str-whitespace(opt)   str-whitespace-char
+
+    str-whitespace-char::
+    new-line
+    Space character (0x20)
+    Horizontal-tab character (0x09)
+    Vertical-tab character (0x0B)
+    Form-feed character (0x0C)
+
+    str-number::
+    digit-sequence
+    floating-literal
+*/
