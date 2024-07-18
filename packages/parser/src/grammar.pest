@@ -42,152 +42,152 @@ NAMESPACE_NAME             =  { NAME ~ ("\\" ~ NAME)* }
 NAMESPACE_NAME_AS_A_PREFIX =  {
     "\\"
   | ("\\"? ~ NAMESPACE_NAME ~ "\\")
-  | (KEYWORD_NAMESPACE ~ "\\")
-  | (KEYWORD_NAMESPACE ~ "\\" ~ NAMESPACE_NAME ~ "\\")
+  | ("namespace" ~ "\\")
+  | ("namespace" ~ "\\" ~ NAMESPACE_NAME ~ "\\")
 }
 QUALIFIED_NAME             =  { NAMESPACE_NAME_AS_A_PREFIX? ~ NAME }
-NAME                       =  { NAME_NONDIGIT ~ (NAME_NONDIGIT | DIGIT)* }
+NAME                       =  { NAME_NONDIGIT ~ (NAME_NONDIGIT | ASCII_DIGIT)* }
 NAME_NONDIGIT              = _{ NONDIGIT | '\u{80}'..'\u{FF}' }
 NONDIGIT                   = _{ "_" | ASCII_ALPHA }
 
 // Keywords
 
-KEYWORD              = {
-    KEYWORD_ABSTRACT
-  | KEYWORD_AND
-  | KEYWORD_ARRAY
-  | KEYWORD_AS
-  | KEYWORD_BREAK
-  | KEYWORD_CALLABLE
-  | KEYWORD_CASE
-  | KEYWORD_CATCH
-  | KEYWORD_CLASS
-  | KEYWORD_CLONE
-  | KEYWORD_CONST
-  | KEYWORD_CONTINUE
-  | KEYWORD_DECLARE
-  | KEYWORD_DEFAULT
-  | KEYWORD_DIE
-  | KEYWORD_DO
-  | KEYWORD_ECHO
-  | KEYWORD_ELSE
-  | KEYWORD_ELSEIF
-  | KEYWORD_EMPTY
-  | KEYWORD_ENDDECLARE
-  | KEYWORD_ENDFOR
-  | KEYWORD_ENDFOREACH
-  | KEYWORD_ENDIF
-  | KEYWORD_ENDSWITCH
-  | KEYWORD_ENDWHILE
-  | KEYWORD_EVAL
-  | KEYWORD_EXIT
-  | KEYWORD_EXTENDS
-  | KEYWORD_FINAL
-  | KEYWORD_FINALLY
-  | KEYWORD_FOR
-  | KEYWORD_FOREACH
-  | KEYWORD_FUNCTION
-  | KEYWORD_GLOBAL
-  | KEYWORD_GOTO
-  | KEYWORD_IF
-  | KEYWORD_IMPLEMENTS
-  | KEYWORD_INCLUDE
-  | KEYWORD_INCLUDE_ONCE
-  | KEYWORD_INSTANCEOF
-  | KEYWORD_INSTEADOF
-  | KEYWORD_INTERFACE
-  | KEYWORD_ISSET
-  | KEYWORD_LIST
-  | KEYWORD_NAMESPACE
-  | KEYWORD_NEW
-  | KEYWORD_OR
-  | KEYWORD_PRINT
-  | KEYWORD_PRIVATE
-  | KEYWORD_PROTECTED
-  | KEYWORD_PUBLIC
-  | KEYWORD_REQUIRE
-  | KEYWORD_REQUIRE_ONCE
-  | KEYWORD_RETURN
-  | KEYWORD_STATIC
-  | KEYWORD_SWITCH
-  | KEYWORD_THROW
-  | KEYWORD_TRAIT
-  | KEYWORD_TRY
-  | KEYWORD_UNSET
-  | KEYWORD_USE
-  | KEYWORD_VAR
-  | KEYWORD_WHILE
-  | KEYWORD_XOR
-  | KEYWORD_YIELD
-  | KEYWORD_YIELD_FROM
+KEYWORD      = {
+    ABSTRACT
+  | AND
+  | ARRAY
+  | AS
+  | BREAK
+  | CALLABLE
+  | CASE
+  | CATCH
+  | CLASS
+  | CLONE
+  | CONST
+  | CONTINUE
+  | DECLARE
+  | DEFAULT
+  | DIE
+  | DO
+  | ECHO
+  | ELSE
+  | ELSEIF
+  | EMPTY
+  | ENDDECLARE
+  | ENDFOR
+  | ENDFOREACH
+  | ENDIF
+  | ENDSWITCH
+  | ENDWHILE
+  | EVAL
+  | EXIT
+  | EXTENDS
+  | FINAL
+  | FINALLY
+  | FOR
+  | FOREACH
+  | FUNCTION
+  | GLOBAL
+  | GOTO
+  | IF
+  | IMPLEMENTS
+  | INCLUDE
+  | INCLUDE_ONCE
+  | INSTANCEOF
+  | INSTEADOF
+  | INTERFACE
+  | ISSET
+  | LIST
+  | NAMESPACE
+  | NEW
+  | OR
+  | PRINT
+  | PRIVATE
+  | PROTECTED
+  | PUBLIC
+  | REQUIRE
+  | REQUIRE_ONCE
+  | RETURN
+  | STATIC
+  | SWITCH
+  | THROW
+  | TRAIT
+  | TRY
+  | UNSET
+  | USE
+  | VAR
+  | WHILE
+  | XOR
+  | YIELD
+  | YIELD_FROM
 }
-KEYWORD_ABSTRACT     = { "abstract" }
-KEYWORD_AND          = { "and" }
-KEYWORD_ARRAY        = { "array" }
-KEYWORD_AS           = { "as" }
-KEYWORD_BREAK        = { "break" }
-KEYWORD_CALLABLE     = { "callable" }
-KEYWORD_CASE         = { "case" }
-KEYWORD_CATCH        = { "catch" }
-KEYWORD_CLASS        = { "class" }
-KEYWORD_CLONE        = { "clone" }
-KEYWORD_CONST        = { "const" }
-KEYWORD_CONTINUE     = { "continue" }
-KEYWORD_DECLARE      = { "declare" }
-KEYWORD_DEFAULT      = { "default" }
-KEYWORD_DIE          = { "die" }
-KEYWORD_DO           = { "do" }
-KEYWORD_ECHO         = { "echo" }
-KEYWORD_ELSE         = { "else" }
-KEYWORD_ELSEIF       = { "elseif" }
-KEYWORD_EMPTY        = { "empty" }
-KEYWORD_ENDDECLARE   = { "enddeclare" }
-KEYWORD_ENDFOR       = { "endfor" }
-KEYWORD_ENDFOREACH   = { "endforeach" }
-KEYWORD_ENDIF        = { "endif" }
-KEYWORD_ENDSWITCH    = { "endswitch" }
-KEYWORD_ENDWHILE     = { "endwhile" }
-KEYWORD_EVAL         = { "eval" }
-KEYWORD_EXIT         = { "exit" }
-KEYWORD_EXTENDS      = { "extends" }
-KEYWORD_FINAL        = { "final" }
-KEYWORD_FINALLY      = { "finally" }
-KEYWORD_FOR          = { "for" }
-KEYWORD_FOREACH      = { "foreach" }
-KEYWORD_FUNCTION     = { "function" }
-KEYWORD_GLOBAL       = { "global" }
-KEYWORD_GOTO         = { "goto" }
-KEYWORD_IF           = { "if" }
-KEYWORD_IMPLEMENTS   = { "implements" }
-KEYWORD_INCLUDE      = { "include" }
-KEYWORD_INCLUDE_ONCE = { "include_once" }
-KEYWORD_INSTANCEOF   = { "instanceof" }
-KEYWORD_INSTEADOF    = { "insteadof" }
-KEYWORD_INTERFACE    = { "interface" }
-KEYWORD_ISSET        = { "isset" }
-KEYWORD_LIST         = { "list" }
-KEYWORD_NAMESPACE    = { "namespace" }
-KEYWORD_NEW          = { "new" }
-KEYWORD_OR           = { "or" }
-KEYWORD_PRINT        = { "print" }
-KEYWORD_PRIVATE      = { "private" }
-KEYWORD_PROTECTED    = { "protected" }
-KEYWORD_PUBLIC       = { "public" }
-KEYWORD_REQUIRE      = { "require" }
-KEYWORD_REQUIRE_ONCE = { "require_once" }
-KEYWORD_RETURN       = { "return" }
-KEYWORD_STATIC       = { "static" }
-KEYWORD_SWITCH       = { "switch" }
-KEYWORD_THROW        = { "throw" }
-KEYWORD_TRAIT        = { "trait" }
-KEYWORD_TRY          = { "try" }
-KEYWORD_UNSET        = { "unset" }
-KEYWORD_USE          = { "use" }
-KEYWORD_VAR          = { "var" }
-KEYWORD_WHILE        = { "while" }
-KEYWORD_XOR          = { "xor" }
-KEYWORD_YIELD        = { "yield" }
-KEYWORD_YIELD_FROM   = { "yield from" }
+ABSTRACT     = { "abstract" }
+AND          = { "and" }
+ARRAY        = { "array" }
+AS           = { "as" }
+BREAK        = { "break" }
+CALLABLE     = { "callable" }
+CASE         = { "case" }
+CATCH        = { "catch" }
+CLASS        = { "class" }
+CLONE        = { "clone" }
+CONST        = { "const" }
+CONTINUE     = { "continue" }
+DECLARE      = { "declare" }
+DEFAULT      = { "default" }
+DIE          = { "die" }
+DO           = { "do" }
+ECHO         = { "echo" }
+ELSE         = { "else" }
+ELSEIF       = { "elseif" }
+EMPTY        = { "empty" }
+ENDDECLARE   = { "enddeclare" }
+ENDFOR       = { "endfor" }
+ENDFOREACH   = { "endforeach" }
+ENDIF        = { "endif" }
+ENDSWITCH    = { "endswitch" }
+ENDWHILE     = { "endwhile" }
+EVAL         = { "eval" }
+EXIT         = { "exit" }
+EXTENDS      = { "extends" }
+FINAL        = { "final" }
+FINALLY      = { "finally" }
+FOR          = { "for" }
+FOREACH      = { "foreach" }
+FUNCTION     = { "function" }
+GLOBAL       = { "global" }
+GOTO         = { "goto" }
+IF           = { "if" }
+IMPLEMENTS   = { "implements" }
+INCLUDE      = { "include" }
+INCLUDE_ONCE = { "include_once" }
+INSTANCEOF   = { "instanceof" }
+INSTEADOF    = { "insteadof" }
+INTERFACE    = { "interface" }
+ISSET        = { "isset" }
+LIST         = { "list" }
+NAMESPACE    = { "namespace" }
+NEW          = { "new" }
+OR           = { "or" }
+PRINT        = { "print" }
+PRIVATE      = { "private" }
+PROTECTED    = { "protected" }
+PUBLIC       = { "public" }
+REQUIRE      = { "require" }
+REQUIRE_ONCE = { "require_once" }
+RETURN       = { "return" }
+STATIC       = { "static" }
+SWITCH       = { "switch" }
+THROW        = { "throw" }
+TRAIT        = { "trait" }
+TRY          = { "try" }
+UNSET        = { "unset" }
+USE          = { "use" }
+VAR          = { "var" }
+WHILE        = { "while" }
+XOR          = { "xor" }
+YIELD        = { "yield" }
+YIELD_FROM   = { "yield from" }
 
 // Integer Literal
 
@@ -197,25 +197,17 @@ INTEGER_LITERAL     = {
   | HEXADECIMAL_LITERAL
   | BINARY_LITERAL
 }
-DECIMAL_LITERAL     = { NONZERO_DIGIT ~ DIGIT* }
-OCTAL_LITERAL       = { "0" ~ OCTAL_DIGIT+ }
-HEXADECIMAL_LITERAL = { "0" ~ ^"x" ~ HEXADECIMAL_DIGIT+ }
-BINARY_LITERAL      = { "0" ~ ^"b" ~ BINARY_DIGIT+ }
-
-DIGIT             = _{ ASCII_DIGIT }
-NONZERO_DIGIT     = _{ ASCII_NONZERO_DIGIT }
-OCTAL_DIGIT       = _{ ASCII_OCT_DIGIT }
-HEXADECIMAL_DIGIT = _{ ASCII_HEX_DIGIT }
-BINARY_DIGIT      = _{ ASCII_BIN_DIGIT }
+DECIMAL_LITERAL     = { ASCII_NONZERO_DIGIT ~ ASCII_DIGIT* }
+OCTAL_LITERAL       = { "0" ~ ASCII_OCT_DIGIT+ }
+HEXADECIMAL_LITERAL = { "0" ~ ^"x" ~ ASCII_HEX_DIGIT+ }
+BINARY_LITERAL      = { "0" ~ ^"b" ~ ASCII_BIN_DIGIT+ }
 
 // Floating Literal
 
-FLOATING_LITERAL   =  { (FRACTIONAL_LITERAL ~ EXPONENT_PART?) | (DIGIT+ ~ EXPONENT_PART) }
-FRACTIONAL_LITERAL =  { (DIGIT* ~ "." ~ DIGIT+) | (DIGIT+ ~ ".") }
-EXPONENT_PART      = _{ ^"e" ~ SIGN? ~ DIGIT+ }
-SIGN               =  { SIGN_PLUS | SIGN_MINUS }
-SIGN_PLUS          =  { "+" }
-SIGN_MINUS         =  { "-" }
+FLOATING_LITERAL   =  { (FRACTIONAL_LITERAL ~ EXPONENT_PART?) | (ASCII_DIGIT+ ~ EXPONENT_PART) }
+FRACTIONAL_LITERAL =  { (ASCII_DIGIT* ~ "." ~ ASCII_DIGIT+) | (ASCII_DIGIT+ ~ ".") }
+EXPONENT_PART      = _{ ^"e" ~ SIGN? ~ ASCII_DIGIT+ }
+SIGN               =  { "+" | "-" }
 
 // String Literal
 
@@ -233,7 +225,7 @@ DOUBLE_QUOTED_STRING_LITERAL              =  { BINARY_PREFIX? ~ "\"" ~ DOUBLE_QU
 DOUBLE_QUOTED_CHARACTER                   =  {
     DOUBLE_QUOTED_ESCAPE_SEQUENCE
   | !("\"" | "\\") ~ ANY
-  | "\\" ~ !("\"" | "\\" | "$" | "e" | "f" | "n" | "r" | "t" | "v" | ^"x" | OCTAL_DIGIT) ~ ANY
+  | "\\" ~ !("\"" | "\\" | "$" | "e" | "f" | "n" | "r" | "t" | "v" | ^"x" | ASCII_OCT_DIGIT) ~ ANY
 }
 DOUBLE_QUOTED_ESCAPE_SEQUENCE             =  {
     DOUBLE_QUOTED_SIMPLE_ESCAPE_SEQUENCE
@@ -242,13 +234,10 @@ DOUBLE_QUOTED_ESCAPE_SEQUENCE             =  {
   | DOUBLE_QUOTED_UNICODE_ESCAPE_SEQUENCE
 }
 DOUBLE_QUOTED_SIMPLE_ESCAPE_SEQUENCE      = _{ "\\\"" | "\\\\" | "\\$" | "\\e" | "\\f" | "\\n" | "\\r" | "\\t" | "\\v" }
-DOUBLE_QUOTED_OCTAL_ESCAPE_SEQUENCE       = _{ "\\" ~ OCTAL_DIGIT{1, 3} }
-DOUBLE_QUOTED_HEXADECIMAL_ESCAPE_SEQUENCE = _{ "\\" ~ ^"x" ~ HEXADECIMAL_DIGIT{1, 2} }
-DOUBLE_QUOTED_UNICODE_ESCAPE_SEQUENCE     = _{ "\\u" ~ "{" ~ HEXADECIMAL_DIGIT+ ~ "}" }
-STRING_VARIABLE                           =  {
-    VARIABLE_NAME ~ OFFSET_OR_PROPERTY?
-  | "{$" ~ EXPRESSION ~ "}"
-}
+DOUBLE_QUOTED_OCTAL_ESCAPE_SEQUENCE       = _{ "\\" ~ ASCII_OCT_DIGIT{1, 3} }
+DOUBLE_QUOTED_HEXADECIMAL_ESCAPE_SEQUENCE = _{ "\\" ~ ^"x" ~ ASCII_HEX_DIGIT{1, 2} }
+DOUBLE_QUOTED_UNICODE_ESCAPE_SEQUENCE     = _{ "\\u" ~ "{" ~ ASCII_HEX_DIGIT+ ~ "}" }
+STRING_VARIABLE                           =  { VARIABLE_NAME ~ OFFSET_OR_PROPERTY? | "{$" ~ EXPRESSION ~ "}" }
 OFFSET_OR_PROPERTY                        =  { OFFSET_IN_STRING | PROPERTY_IN_STRING }
 OFFSET_IN_STRING                          =  { "[" ~ (NAME | VARIABLE_NAME | INTEGER_LITERAL) ~ "]" }
 PROPERTY_IN_STRING                        =  { "->" ~ NAME }
@@ -259,7 +248,7 @@ HEREDOC_BODY                              =  { HEREDOC_CHAR* ~ NEW_LINE }
 HEREDOC_CHAR                              = _{
     HEREDOC_ESCAPE_SEQUENCE
   | !"\\" ~ ANY
-  | "\\" ~ !("\\" | "$" | "e" | "f" | "n" | "r" | "t" | "v" | ^"x" | OCTAL_DIGIT) ~ ANY
+  | "\\" ~ !("\\" | "$" | "e" | "f" | "n" | "r" | "t" | "v" | ^"x" | ASCII_OCT_DIGIT) ~ ANY
 }
 HEREDOC_ESCAPE_SEQUENCE                   =  {
     HEREDOC_SIMPLE_ESCAPE_SEQUENCE
@@ -272,104 +261,104 @@ NOWDOC_STRING_LITERAL                     =  { BINARY_PREFIX? ~ "<<<" ~ "'" ~ NA
 
 // Operators and Punctuators
 
-OPERATOR_OR_PUNCTUATOR                  = _{ OPERATOR | PUNCTUATOR }
-OPERATOR                                = _{
-    OPERATOR_DOT
-  | OPERATOR_OBJECT
-  | OPERATOR_INCREMENT
-  | OPERATOR_DECREMENT
-  | OPERATOR_EXPONENTIATION
-  | OPERATOR_MULTIPLICATION
-  | OPERATOR_ADDITION
-  | OPERATOR_SUBTRACTION
-  | OPERATOR_BITWISE_NOT
-  | OPERATOR_LOGICAL_NOT
-  | OPERATOR_DIVISION
-  | OPERATOR_MODULUS
-  | OPERATOR_BITWISE_LEFT_SHIFT
-  | OPERATOR_BITWISE_RIGHT_SHIFT
-  | OPERATOR_LESS_THAN
-  | OPERATOR_GREATER_THAN
-  | OPERATOR_LESS_THAN_OR_EQUAL
-  | OPERATOR_GREATER_THAN_OR_EQUAL
-  | OPERATOR_EQUALITY
-  | OPERATOR_IDENTITY
-  | OPERATOR_INEQUALITY
-  | OPERATOR_NON_IDENTITY
-  | OPERATOR_BITWISE_XOR
-  | OPERATOR_BITWISE_OR
-  | OPERATOR_BITWISE_AND
-  | OPERATOR_LOGICAL_AND
-  | OPERATOR_LOGICAL_OR
-  | OPERATOR_TERNARY_CONDITION
-  | OPERATOR_TERNARY_SEPARATOR
-  | OPERATOR_ASSIGNMENT
-  | OPERATOR_EXPONENTIATION_ASSIGNMENT
-  | OPERATOR_MULTIPLICATION_ASSIGNMENT
-  | OPERATOR_DIVISION_ASSIGNMENT
-  | OPERATOR_MODULUS_ASSIGNMENT
-  | OPERATOR_ADDITION_ASSIGNMENT
-  | OPERATOR_SUBTRACTION_ASSIGNMENT
-  | OPERATOR_CONCATENATION_ASSIGNMENT
-  | OPERATOR_BITWISE_LEFT_SHIFT_ASSIGNMENT
-  | OPERATOR_BITWISE_RIGHT_SHIFT_ASSIGNMENT
-  | OPERATOR_BITWISE_AND_ASSIGNMENT
-  | OPERATOR_BITWISE_XOR_ASSIGNMENT
-  | OPERATOR_BITWISE_OR_ASSIGNMENT
-  | OPERATOR_NULL_COALESCING
-  | OPERATOR_SCOPE_RESOLUTION
-  | OPERATOR_ARRAY_ASSOCIATION
-  | OPERATOR_SPACESHIP
-  | OPERATOR_ELLIPSIS
+OPERATOR_OR_PUNCTUATOR         = _{ OPERATOR | PUNCTUATOR }
+OPERATOR                       = _{
+    DOT
+  | OBJECT_ARROW
+  | INCREMENT
+  | DECREMENT
+  | EXPONENTIATION
+  | MULTIPLICATION
+  | ADDITION
+  | SUBTRACTION
+  | BITWISE_NOT
+  | LOGICAL_NOT
+  | DIVISION
+  | MODULUS
+  | BITWISE_LEFT_SHIFT
+  | BITWISE_RIGHT_SHIFT
+  | LESS_THAN
+  | GREATER_THAN
+  | LESS_THAN_OR_EQUAL
+  | GREATER_THAN_OR_EQUAL
+  | EQUALITY
+  | IDENTITY
+  | INEQUALITY
+  | NON_IDENTITY
+  | BITWISE_XOR
+  | BITWISE_OR
+  | BITWISE_AND
+  | LOGICAL_AND
+  | LOGICAL_OR
+  | TERNARY_CONDITION
+  | TERNARY_SEPARATOR
+  | ASSIGNMENT
+  | EXPONENTIATION_ASSIGNMENT
+  | MULTIPLICATION_ASSIGNMENT
+  | DIVISION_ASSIGNMENT
+  | MODULUS_ASSIGNMENT
+  | ADDITION_ASSIGNMENT
+  | SUBTRACTION_ASSIGNMENT
+  | CONCATENATION_ASSIGNMENT
+  | BITWISE_LEFT_SHIFT_ASSIGNMENT
+  | BITWISE_RIGHT_SHIFT_ASSIGNMENT
+  | BITWISE_AND_ASSIGNMENT
+  | BITWISE_XOR_ASSIGNMENT
+  | BITWISE_OR_ASSIGNMENT
+  | NULL_COALESCING
+  | SCOPE_RESOLUTION
+  | ARRAY_ARROW
+  | SPACESHIP
+  | ELLIPSIS
 }
-OPERATOR_DOT                            =  { "." }
-OPERATOR_OBJECT                         =  { "->" }
-OPERATOR_INCREMENT                      =  { "++" }
-OPERATOR_DECREMENT                      =  { "--" }
-OPERATOR_EXPONENTIATION                 =  { "**" }
-OPERATOR_MULTIPLICATION                 =  { "*" }
-OPERATOR_ADDITION                       =  { "+" }
-OPERATOR_SUBTRACTION                    =  { "-" }
-OPERATOR_BITWISE_NOT                    =  { "~" }
-OPERATOR_LOGICAL_NOT                    =  { "!" }
-OPERATOR_DIVISION                       =  { "/" }
-OPERATOR_MODULUS                        =  { "%" }
-OPERATOR_BITWISE_LEFT_SHIFT             =  { "<<" }
-OPERATOR_BITWISE_RIGHT_SHIFT            =  { ">>" }
-OPERATOR_LESS_THAN                      =  { "<" }
-OPERATOR_GREATER_THAN                   =  { ">" }
-OPERATOR_LESS_THAN_OR_EQUAL             =  { "<=" }
-OPERATOR_GREATER_THAN_OR_EQUAL          =  { ">=" }
-OPERATOR_EQUALITY                       =  { "==" }
-OPERATOR_IDENTITY                       =  { "===" }
-OPERATOR_INEQUALITY                     =  { "!=" }
-OPERATOR_NON_IDENTITY                   =  { "!==" }
-OPERATOR_BITWISE_XOR                    =  { "^" }
-OPERATOR_BITWISE_OR                     =  { "|" }
-OPERATOR_BITWISE_AND                    =  { "&" }
-OPERATOR_LOGICAL_AND                    =  { "&&" }
-OPERATOR_LOGICAL_OR                     =  { "||" }
-OPERATOR_TERNARY_CONDITION              =  { "?" }
-OPERATOR_TERNARY_SEPARATOR              =  { ":" }
-OPERATOR_ASSIGNMENT                     =  { "=" }
-OPERATOR_EXPONENTIATION_ASSIGNMENT      =  { "**=" }
-OPERATOR_MULTIPLICATION_ASSIGNMENT      =  { "*=" }
-OPERATOR_DIVISION_ASSIGNMENT            =  { "/=" }
-OPERATOR_MODULUS_ASSIGNMENT             =  { "%=" }
-OPERATOR_ADDITION_ASSIGNMENT            =  { "+=" }
-OPERATOR_SUBTRACTION_ASSIGNMENT         =  { "-=" }
-OPERATOR_CONCATENATION_ASSIGNMENT       =  { ".=" }
-OPERATOR_BITWISE_LEFT_SHIFT_ASSIGNMENT  =  { "<<=" }
-OPERATOR_BITWISE_RIGHT_SHIFT_ASSIGNMENT =  { ">>=" }
-OPERATOR_BITWISE_AND_ASSIGNMENT         =  { "&=" }
-OPERATOR_BITWISE_XOR_ASSIGNMENT         =  { "^=" }
-OPERATOR_BITWISE_OR_ASSIGNMENT          =  { "|=" }
-OPERATOR_NULL_COALESCING                =  { "??" }
-OPERATOR_SCOPE_RESOLUTION               =  { "::" }
-OPERATOR_ARRAY_ASSOCIATION              =  { "=>" }
-OPERATOR_SPACESHIP                      =  { "<=>" }
-OPERATOR_ELLIPSIS                       =  { "..." }
-PUNCTUATOR                              = _{
+DOT                            =  { "." }
+OBJECT_ARROW                   =  { "->" }
+INCREMENT                      =  { "++" }
+DECREMENT                      =  { "--" }
+EXPONENTIATION                 =  { "**" }
+MULTIPLICATION                 =  { "*" }
+ADDITION                       =  { "+" }
+SUBTRACTION                    =  { "-" }
+BITWISE_NOT                    =  { "~" }
+LOGICAL_NOT                    =  { "!" }
+DIVISION                       =  { "/" }
+MODULUS                        =  { "%" }
+BITWISE_LEFT_SHIFT             =  { "<<" }
+BITWISE_RIGHT_SHIFT            =  { ">>" }
+LESS_THAN                      =  { "<" }
+GREATER_THAN                   =  { ">" }
+LESS_THAN_OR_EQUAL             =  { "<=" }
+GREATER_THAN_OR_EQUAL          =  { ">=" }
+EQUALITY                       =  { "==" }
+IDENTITY                       =  { "===" }
+INEQUALITY                     =  { "!=" }
+NON_IDENTITY                   =  { "!==" }
+BITWISE_XOR                    =  { "^" }
+BITWISE_OR                     =  { "|" }
+BITWISE_AND                    =  { "&" }
+LOGICAL_AND                    =  { "&&" }
+LOGICAL_OR                     =  { "||" }
+TERNARY_CONDITION              =  { "?" }
+TERNARY_SEPARATOR              =  { ":" }
+ASSIGNMENT                     =  { "=" }
+EXPONENTIATION_ASSIGNMENT      =  { "**=" }
+MULTIPLICATION_ASSIGNMENT      =  { "*=" }
+DIVISION_ASSIGNMENT            =  { "/=" }
+MODULUS_ASSIGNMENT             =  { "%=" }
+ADDITION_ASSIGNMENT            =  { "+=" }
+SUBTRACTION_ASSIGNMENT         =  { "-=" }
+CONCATENATION_ASSIGNMENT       =  { ".=" }
+BITWISE_LEFT_SHIFT_ASSIGNMENT  =  { "<<=" }
+BITWISE_RIGHT_SHIFT_ASSIGNMENT =  { ">>=" }
+BITWISE_AND_ASSIGNMENT         =  { "&=" }
+BITWISE_XOR_ASSIGNMENT         =  { "^=" }
+BITWISE_OR_ASSIGNMENT          =  { "|=" }
+NULL_COALESCING                =  { "??" }
+SCOPE_RESOLUTION               =  { "::" }
+ARRAY_ARROW                    =  { "=>" }
+SPACESHIP                      =  { "<=>" }
+ELLIPSIS                       =  { "..." }
+PUNCTUATOR                     = _{
     LEFT_SQUARE_BRACKET
   | RIGHT_SQUARE_BRACKET
   | LEFT_PARENTHESIS
@@ -381,16 +370,16 @@ PUNCTUATOR                              = _{
   | STATEMENT_TERMINATOR
   | NAMESPACE_SEPARATOR
 }
-LEFT_SQUARE_BRACKET                     =  { "[" }
-RIGHT_SQUARE_BRACKET                    =  { "]" }
-LEFT_PARENTHESIS                        =  { "(" }
-RIGHT_PARENTHESIS                       =  { ")" }
-LEFT_CURLY_BRACE                        =  { "{" }
-RIGHT_CURLY_BRACE                       =  { "}" }
-VARIABLE_SYMBOL                         =  { "$" }
-LIST_SEPARATOR                          =  { "," }
-STATEMENT_TERMINATOR                    =  { ";" }
-NAMESPACE_SEPARATOR                     =  { "\\" }
+LEFT_SQUARE_BRACKET            =  { "[" }
+RIGHT_SQUARE_BRACKET           =  { "]" }
+LEFT_PARENTHESIS               =  { "(" }
+RIGHT_PARENTHESIS              =  { ")" }
+LEFT_CURLY_BRACE               =  { "{" }
+RIGHT_CURLY_BRACE              =  { "}" }
+VARIABLE_SYMBOL                =  { "$" }
+LIST_SEPARATOR                 =  { "," }
+STATEMENT_TERMINATOR           =  { ";" }
+NAMESPACE_SEPARATOR            =  { "\\" }
 
 // ***  SYNTATIC GRAMMAR *** //
 
@@ -405,12 +394,12 @@ TEXT            = { (!START_TAG ~ ANY)* }
 
 // Variables
 
-FUNCTION_STATIC_DECLARATION = { KEYWORD_STATIC ~ STATIC_VARIABLE_NAME_LIST ~ STATEMENT_TERMINATOR }
-STATIC_VARIABLE_NAME_LIST   = { STATIC_VARIABLE_DECLARATION ~ (LIST_SEPARATOR ~ STATIC_VARIABLE_DECLARATION)* }
+FUNCTION_STATIC_DECLARATION = { "static" ~ STATIC_VARIABLE_NAME_LIST ~ ";" }
+STATIC_VARIABLE_NAME_LIST   = { STATIC_VARIABLE_DECLARATION ~ ("," ~ STATIC_VARIABLE_DECLARATION)* }
 STATIC_VARIABLE_DECLARATION = { VARIABLE_NAME ~ FUNCTION_STATIC_INITIALIZER? }
-FUNCTION_STATIC_INITIALIZER = { OPERATOR_ASSIGNMENT ~ CONSTANT_EXPRESSION }
-GLOBAL_DECLARATION          = { KEYWORD_GLOBAL ~ VARIABLE_NAME_LIST ~ STATEMENT_TERMINATOR }
-VARIABLE_NAME_LIST          = { SIMPLE_VARIABLE ~ (LIST_SEPARATOR ~ SIMPLE_VARIABLE)* }
+FUNCTION_STATIC_INITIALIZER = { ASSIGNMENT ~ CONSTANT_EXPRESSION }
+GLOBAL_DECLARATION          = { "global" ~ VARIABLE_NAME_LIST ~ ";" }
+VARIABLE_NAME_LIST          = { SIMPLE_VARIABLE ~ ("," ~ SIMPLE_VARIABLE)* }
 
 // Expressions
 
@@ -460,39 +449,39 @@ VARIABLE                   = { CALLABLE_VARIABLE | SCOPED_PROPERTY_ACCESS_EXPRES
 CONSTANT_ACCESS_EXPRESSION = { QUALIFIED_NAME }
 LITERAL                    = { INTEGER_LITERAL | FLOATING_LITERAL | STRING_LITERAL }
 INTRINSIC                  = { EMPTY_INTRINSIC | EVAL_INTRINSIC | EXIT_INTRINSIC | ISSET_INTRINSIC }
-EMPTY_INTRINSIC            = { KEYWORD_EMPTY ~ LEFT_PARENTHESIS ~ EXPRESSION ~ RIGHT_PARENTHESIS }
-EVAL_INTRINSIC             = { KEYWORD_EVAL ~ LEFT_PARENTHESIS ~ EXPRESSION ~ RIGHT_PARENTHESIS }
+EMPTY_INTRINSIC            = { "empty" ~ LEFT_PARENTHESIS ~ EXPRESSION ~ RIGHT_PARENTHESIS }
+EVAL_INTRINSIC             = { "eval" ~ LEFT_PARENTHESIS ~ EXPRESSION ~ RIGHT_PARENTHESIS }
 EXIT_INTRINSIC             = {
-    KEYWORD_EXIT ~ (LEFT_PARENTHESIS ~ EXPRESSION? ~ RIGHT_PARENTHESIS)?
-  | KEYWORD_DIE ~ (LEFT_PARENTHESIS ~ EXPRESSION? ~ RIGHT_PARENTHESIS)?
+    "exit" ~ (LEFT_PARENTHESIS ~ EXPRESSION? ~ RIGHT_PARENTHESIS)?
+  | "die" ~ (LEFT_PARENTHESIS ~ EXPRESSION? ~ RIGHT_PARENTHESIS)?
 }
-ISSET_INTRINSIC            = { KEYWORD_ISSET ~ LEFT_PARENTHESIS ~ VARIABLE_LIST ~ LIST_SEPARATOR? ~ RIGHT_PARENTHESIS }
-VARIABLE_LIST              = { VARIABLE ~ (LIST_SEPARATOR ~ VARIABLE)* }
+ISSET_INTRINSIC            = { "isset" ~ LEFT_PARENTHESIS ~ VARIABLE_LIST ~ ","? ~ RIGHT_PARENTHESIS }
+VARIABLE_LIST              = { VARIABLE ~ ("," ~ VARIABLE)* }
 // @TODO: We may need to define white space between keywords
-ANONYMOUS_FUNCTION_CREATION_EXPRESSION =  { KEYWORD_STATIC? ~ KEYWORD_FUNCTION ~ OPERATOR_BITWISE_AND? ~ LEFT_PARENTHESIS ~ PARAMETER_DECLARATION_LIST? ~ RIGHT_PARENTHESIS ~ ANONYMOUS_FUNCTION_USE_CLAUSE? ~ RETURN_TYPE? ~ COMPOUND_STATEMENT }
-ANONYMOUS_FUNCTION_USE_CLAUSE          =  { KEYWORD_USE ~ LEFT_PARENTHESIS ~ USE_VARIABLE_NAME_LIST ~ RIGHT_PARENTHESIS }
-USE_VARIABLE_NAME_LIST                 =  { OPERATOR_BITWISE_AND? ~ VARIABLE_NAME ~ (LIST_SEPARATOR ~ OPERATOR_BITWISE_AND? ~ VARIABLE_NAME)* }
+ANONYMOUS_FUNCTION_CREATION_EXPRESSION =  { "static"? ~ "function" ~ BITWISE_AND? ~ LEFT_PARENTHESIS ~ PARAMETER_DECLARATION_LIST? ~ RIGHT_PARENTHESIS ~ ANONYMOUS_FUNCTION_USE_CLAUSE? ~ RETURN_TYPE? ~ COMPOUND_STATEMENT }
+ANONYMOUS_FUNCTION_USE_CLAUSE          =  { "use" ~ LEFT_PARENTHESIS ~ USE_VARIABLE_NAME_LIST ~ RIGHT_PARENTHESIS }
+USE_VARIABLE_NAME_LIST                 =  { BITWISE_AND? ~ VARIABLE_NAME ~ ("," ~ BITWISE_AND? ~ VARIABLE_NAME)* }
 OBJECT_CREATION_EXPRESSION             =  {
-    KEYWORD_NEW ~ CLASS_TYPE_DESIGNATOR ~ (LEFT_PARENTHESIS ~ ARGUMENT_EXPRESSION_LIST? ~ RIGHT_PARENTHESIS)?
-  | KEYWORD_NEW ~ KEYWORD_CLASS ~ (LEFT_PARENTHESIS ~ ARGUMENT_EXPRESSION_LIST? ~ RIGHT_PARENTHESIS)? ~ CLASS_BASE_CLAUSE? ~ CLASS_INTERFACE_CLAUSE? ~ LEFT_CURLY_BRACE ~ CLASS_MEMBER_DECLARATIONS? ~ RIGHT_CURLY_BRACE
+    "new" ~ CLASS_TYPE_DESIGNATOR ~ (LEFT_PARENTHESIS ~ ARGUMENT_EXPRESSION_LIST? ~ RIGHT_PARENTHESIS)?
+  | "new" ~ "class" ~ (LEFT_PARENTHESIS ~ ARGUMENT_EXPRESSION_LIST? ~ RIGHT_PARENTHESIS)? ~ CLASS_BASE_CLAUSE? ~ CLASS_INTERFACE_CLAUSE? ~ LEFT_CURLY_BRACE ~ CLASS_MEMBER_DECLARATIONS? ~ RIGHT_CURLY_BRACE
 }
 CLASS_TYPE_DESIGNATOR                  = _{ QUALIFIED_NAME | NEW_VARIABLE }
 NEW_VARIABLE                           =  { NEW_VARIABLE_BASE ~ NEW_VARIABLE_SUFFIX* }
 NEW_VARIABLE_BASE                      = _{
     SIMPLE_VARIABLE
-  | QUALIFIED_NAME ~ OPERATOR_SCOPE_RESOLUTION ~ SIMPLE_VARIABLE
-  | RELATIVE_SCOPE ~ OPERATOR_SCOPE_RESOLUTION ~ SIMPLE_VARIABLE
+  | QUALIFIED_NAME ~ SCOPE_RESOLUTION ~ SIMPLE_VARIABLE
+  | RELATIVE_SCOPE ~ SCOPE_RESOLUTION ~ SIMPLE_VARIABLE
 }
 NEW_VARIABLE_SUFFIX                    = _{
     LEFT_SQUARE_BRACKET ~ EXPRESSION? ~ RIGHT_SQUARE_BRACKET
   | LEFT_CURLY_BRACE ~ EXPRESSION ~ RIGHT_CURLY_BRACE
-  | OPERATOR_OBJECT ~ MEMBER_NAME
-  | OPERATOR_SCOPE_RESOLUTION ~ SIMPLE_VARIABLE
+  | OBJECT ~ MEMBER_NAME
+  | SCOPE_RESOLUTION ~ SIMPLE_VARIABLE
 }
-ARRAY_INITIALIZER_LIST                 =  { ARRAY_ELEMENT_INITIALIZER ~ (LIST_SEPARATOR ~ ARRAY_ELEMENT_INITIALIZER)* }
+ARRAY_INITIALIZER_LIST                 =  { ARRAY_ELEMENT_INITIALIZER ~ ("," ~ ARRAY_ELEMENT_INITIALIZER)* }
 ARRAY_ELEMENT_INITIALIZER              = _{
-    OPERATOR_BITWISE_AND? ~ ELEMENT_VALUE
-  | ELEMENT_KEY ~ OPERATOR_ARRAY_ASSOCIATION ~ OPERATOR_BITWISE_AND? ~ ELEMENT_VALUE
+    BITWISE_AND? ~ ELEMENT_VALUE
+  | ELEMENT_KEY ~ ARRAY_ASSOCIATION ~ BITWISE_AND? ~ ELEMENT_VALUE
 }
 ELEMENT_KEY                            =  { EXPRESSION }
 ELEMENT_VALUE                          =  { EXPRESSION }
@@ -500,37 +489,20 @@ SUBSCRIPT_EXPRESSION                   =  {
     DEREFERENCABLE_EXPRESSION ~ LEFT_SQUARE_BRACKET ~ EXPRESSION? ~ RIGHT_SQUARE_BRACKET
   | DEREFERENCABLE_EXPRESSION ~ LEFT_CURLY_BRACE ~ EXPRESSION ~ RIGHT_CURLY_BRACE
 }
-FUNCTION_CALL_EXPRESSION               =  { (QUALIFIED_NAME | CALLABLE_EXPRESSION) ~ LEFT_PARENTHESIS ~ (ARGUMENT_EXPRESSION_LIST? | ARGUMENT_EXPRESSION_LIST ~ LIST_SEPARATOR) ~ RIGHT_PARENTHESIS }
-ARGUMENT_EXPRESSION_LIST               =  { ARGUMENT_EXPRESSION ~ (LIST_SEPARATOR ~ ARGUMENT_EXPRESSION)* }
+FUNCTION_CALL_EXPRESSION               =  { (QUALIFIED_NAME | CALLABLE_EXPRESSION) ~ LEFT_PARENTHESIS ~ (ARGUMENT_EXPRESSION_LIST? | ARGUMENT_EXPRESSION_LIST ~ ",") ~ RIGHT_PARENTHESIS }
+ARGUMENT_EXPRESSION_LIST               =  { ARGUMENT_EXPRESSION ~ ("," ~ ARGUMENT_EXPRESSION)* }
 ARGUMENT_EXPRESSION                    =  { VARIADIC_UNPACKING | EXPRESSION }
-VARIADIC_UNPACKING                     =  { OPERATOR_ELLIPSIS ~ EXPRESSION }
-MEMBER_ACCESS_EXPRESSION               =  { DEREFERENCABLE_EXPRESSION ~ OPERATOR_OBJECT ~ MEMBER_NAME }
+VARIADIC_UNPACKING                     =  { ELLIPSIS ~ EXPRESSION }
+MEMBER_ACCESS_EXPRESSION               =  { DEREFERENCABLE_EXPRESSION ~ OBJECT ~ MEMBER_NAME }
 MEMBER_NAME                            =  { NAME | SIMPLE_VARIABLE | LEFT_CURLY_BRACE ~ EXPRESSION ~ RIGHT_CURLY_BRACE }
-
-///////////////////////// Continue from here
-MEMBER_CALL_EXPRESSION = {
-    DEREFERENCABLE_EXPRESSION ~ "->" ~ MEMBER_NAME ~ "(" ~ ARGUMENT_EXPRESSION_LIST? ~ ")"
-  | DEREFERENCABLE_EXPRESSION ~ "->" ~ MEMBER_NAME ~ "(" ~ ARGUMENT_EXPRESSION_LIST ~ "," ~ ")"
-}
-
-POSTFIX_INCREMENT_EXPRESSION = { VARIABLE ~ "++" }
-
-POSTFIX_DECREMENT_EXPRESSION = { VARIABLE ~ "--" }
-
-PREFIX_INCREMENT_EXPRESSION = { "++" ~ VARIABLE }
-
-PREFIX_DECREMENT_EXPRESSION = { "--" ~ VARIABLE }
-
-SHELL_COMMAND_EXPRESSION = { "`" ~ DQ_CHAR_SEQUENCE? ~ "`" }
-
-SCOPED_PROPERTY_ACCESS_EXPRESSION = {
-    SCOPE_RESOLUTION_QUALIFIER ~ "::" ~ SIMPLE_VARIABLE
-}
-
-SCOPED_CALL_EXPRESSION = {
-    SCOPE_RESOLUTION_QUALIFIER ~ "::" ~ MEMBER_NAME ~ "(" ~ ARGUMENT_EXPRESSION_LIST? ~ ")"
-  | SCOPE_RESOLUTION_QUALIFIER ~ "::" ~ MEMBER_NAME ~ "(" ~ ARGUMENT_EXPRESSION_LIST ~ "," ~ ")"
-}
+MEMBER_CALL_EXPRESSION                 =  { DEREFERENCABLE_EXPRESSION ~ OBJECT ~ MEMBER_NAME ~ LEFT_PARENTHESIS ~ (ARGUMENT_EXPRESSION_LIST? | ARGUMENT_EXPRESSION_LIST ~ ",") ~ RIGHT_PARENTHESIS }
+POSTFIX_INCREMENT_EXPRESSION           =  { VARIABLE ~ INCREMENT }
+POSTFIX_DECREMENT_EXPRESSION           =  { VARIABLE ~ DECREMENT }
+PREFIX_INCREMENT_EXPRESSION            =  { INCREMENT ~ VARIABLE }
+PREFIX_DECREMENT_EXPRESSION            =  { DECREMENT ~ VARIABLE }
+SHELL_COMMAND_EXPRESSION               =  { "`" ~ DQ_CHAR_SEQUENCE? ~ "`" }
+SCOPED_PROPERTY_ACCESS_EXPRESSION      =  { SCOPE_RESOLUTION_QUALIFIER ~ SCOPE_RESOLUTION ~ SIMPLE_VARIABLE }
+SCOPED_CALL_EXPRESSION                 =  { SCOPE_RESOLUTION_QUALIFIER ~ SCOPE_RESOLUTION ~ MEMBER_NAME ~ LEFT_PARENTHESIS ~ (ARGUMENT_EXPRESSION_LIST? | ARGUMENT_EXPRESSION_LIST ~ ",") ~ RIGHT_PARENTHESIS }
 
 CLASS_CONSTANT_ACCESS_EXPRESSION = {
     SCOPE_RESOLUTION_QUALIFIER ~ "::" ~ NAME
@@ -789,6 +761,6 @@ CONSTANT_EXPRESSION = { EXPRESSION }
     Form-feed character (0x0C)
 
     str-number::
-    digit-sequence
+    ASCII_DIGIT-sequence
     floating-literal
 */
