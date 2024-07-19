@@ -573,3 +573,93 @@ CONSTANT_EXPRESSION                    =  { EXPRESSION }
 
 // Statements
 
+// This rule defines the various types of statements in PHP.
+// It includes compound statements, named label statements, expression statements,
+// selection statements (like if and switch), iteration statements (like for and while),
+// jump statements (like break and continue), try-catch statements, declare statements,
+// echo statements, unset statements, constant declarations, function definitions,
+// class declarations, interface declarations, trait declarations, namespace definitions,
+// namespace use declarations, global declarations, and function static declarations.
+// Each of these statement types is defined in more detail in other rules of the grammar.
+STATEMENT                     = _{
+    COMPOUND_STATEMENT
+  | NAMED_LABEL_STATEMENT
+  | EXPRESSION_STATEMENT
+  | SELECTION_STATEMENT
+  | ITERATION_STATEMENT
+  | JUMP_STATEMENT
+  | TRY_STATEMENT
+  | DECLARE_STATEMENT
+  | ECHO_STATEMENT
+  | UNSET_STATEMENT
+  | CONST_DECLARATION
+  | FUNCTION_DEFINITION
+  | CLASS_DECLARATION
+  | INTERFACE_DECLARATION
+  | TRAIT_DECLARATION
+  | NAMESPACE_DEFINITION
+  | NAMESPACE_USE_DECLARATION
+  | GLOBAL_DECLARATION
+  | FUNCTION_STATIC_DECLARATION
+}
+COMPOUND_STATEMENT            =  { "{" ~ STATEMENT_LIST? ~ "}" }
+STATEMENT_LIST                =  { STATEMENT+ }
+NAMED_LABEL_STATEMENT         =  { NAME ~ ":" }
+EXPRESSION_STATEMENT          =  { EXPRESSION? ~ ";" }
+SELECTION_STATEMENT           =  { IF_STATEMENT | SWITCH_STATEMENT }
+IF_STATEMENT                  =  { "if" ~ "(" ~ EXPRESSION ~ ")" ~ (STATEMENT ~ ELSEIF_CLAUSES_1? ~ ELSE_CLAUSE_1? | ":" ~ STATEMENT_LIST ~ ELSEIF_CLAUSES_2? ~ ELSE_CLAUSE_2? ~ "endif" ~ ";") }
+ELSEIF_CLAUSES_1              =  { ELSEIF_CLAUSE_1+ }
+ELSEIF_CLAUSE_1               =  { "elseif" ~ "(" ~ EXPRESSION ~ ")" ~ STATEMENT }
+ELSE_CLAUSE_1                 =  { "else" ~ STATEMENT }
+ELSEIF_CLAUSES_2              =  { ELSEIF_CLAUSE_2+ }
+ELSEIF_CLAUSE_2               =  { "elseif" ~ "(" ~ EXPRESSION ~ ")" ~ ":" ~ STATEMENT_LIST }
+ELSE_CLAUSE_2                 =  { "else" ~ ":" ~ STATEMENT_LIST }
+SWITCH_STATEMENT              =  { "switch" ~ "(" ~ EXPRESSION ~ ")" ~ ("{" ~ CASE_STATEMENTS? ~ "}" | ":" ~ CASE_STATEMENTS? ~ "endswitch" ~ ";") }
+CASE_STATEMENTS               =  { (CASE_STATEMENT | DEFAULT_STATEMENT)+ }
+CASE_STATEMENT                =  { "case" ~ EXPRESSION ~ CASE_DEFAULT_LABEL_TERMINATOR ~ STATEMENT_LIST? }
+DEFAULT_STATEMENT             =  { "default" ~ CASE_DEFAULT_LABEL_TERMINATOR ~ STATEMENT_LIST? }
+CASE_DEFAULT_LABEL_TERMINATOR =  { ":" | ";" }
+ITERATION_STATEMENT           =  {
+    WHILE_STATEMENT
+  | DO_STATEMENT
+  | FOR_STATEMENT
+  | FOREACH_STATEMENT
+}
+WHILE_STATEMENT               =  { "while" ~ "(" ~ EXPRESSION ~ ")" ~ (STATEMENT | ":" ~ STATEMENT_LIST ~ "endwhile" ~ ";") }
+DO_STATEMENT                  =  { "do" ~ STATEMENT ~ "while" ~ "(" ~ EXPRESSION ~ ")" ~ ";" }
+FOR_STATEMENT                 =  { "for" ~ "(" ~ FOR_INITIALIZER? ~ ";" ~ FOR_CONTROL? ~ ";" ~ FOR_END_OF_LOOP? ~ ")" ~ (STATEMENT | ":" ~ STATEMENT_LIST ~ "endfor" ~ ";") }
+FOR_INITIALIZER               =  { FOR_EXPRESSION_GROUP }
+FOR_CONTROL                   =  { FOR_EXPRESSION_GROUP }
+FOR_END_OF_LOOP               =  { FOR_EXPRESSION_GROUP }
+FOR_EXPRESSION_GROUP          =  { EXPRESSION ~ ("," ~ EXPRESSION)* }
+FOREACH_STATEMENT             =  { "foreach" ~ "(" ~ FOREACH_COLLECTION_NAME ~ "as" ~ FOREACH_KEY? ~ FOREACH_VALUE ~ ")" ~ (STATEMENT | ":" ~ STATEMENT_LIST ~ "endforeach" ~ ";") }
+FOREACH_COLLECTION_NAME       =  { EXPRESSION }
+FOREACH_KEY                   =  { EXPRESSION ~ "=>" }
+FOREACH_VALUE                 =  { "&"? ~ EXPRESSION | LIST_INTRINSIC }
+JUMP_STATEMENT                =  {
+    GOTO_STATEMENT
+  | CONTINUE_STATEMENT
+  | BREAK_STATEMENT
+  | RETURN_STATEMENT
+  | THROW_STATEMENT
+}
+GOTO_STATEMENT                =  { "goto" ~ NAME ~ ";" }
+CONTINUE_STATEMENT            =  { "continue" ~ BREAKOUT_LEVEL? ~ ";" }
+BREAKOUT_LEVEL                =  { INTEGER_LITERAL | "(" ~ BREAKOUT_LEVEL ~ ")" }
+BREAK_STATEMENT               =  { "break" ~ BREAKOUT_LEVEL? ~ ";" }
+RETURN_STATEMENT              =  { "return" ~ EXPRESSION? ~ ";" }
+THROW_STATEMENT               =  { "throw" ~ EXPRESSION ~ ";" }
+TRY_STATEMENT                 =  { "try" ~ COMPOUND_STATEMENT ~ (CATCH_CLAUSES | FINALLY_CLAUSE | CATCH_CLAUSES ~ FINALLY_CLAUSE) }
+CATCH_CLAUSES                 =  { CATCH_CLAUSE+ }
+CATCH_CLAUSE                  =  { "catch" ~ "(" ~ CATCH_NAME_LIST ~ VARIABLE_NAME ~ ")" ~ COMPOUND_STATEMENT }
+CATCH_NAME_LIST               =  { QUALIFIED_NAME ~ ("|" ~ QUALIFIED_NAME)* }
+FINALLY_CLAUSE                =  { "finally" ~ COMPOUND_STATEMENT }
+DECLARE_STATEMENT             =  { "declare" ~ "(" ~ DECLARE_DIRECTIVE ~ ")" ~ (STATEMENT | ":" ~ STATEMENT_LIST ~ "enddeclare" ~ ";" | ";") }
+DECLARE_DIRECTIVE             =  {
+    "ticks" ~ "=" ~ LITERAL
+  | "encoding" ~ "=" ~ LITERAL
+  | "strict_types" ~ "=" ~ LITERAL
+}
+ECHO_STATEMENT                =  { "echo" ~ EXPRESSION_LIST ~ ";" }
+EXPRESSION_LIST               =  { EXPRESSION ~ ("," ~ EXPRESSION)* }
+UNSET_STATEMENT               =  { "unset" ~ "(" ~ VARIABLE_LIST ~ ","? ~ ")" ~ ";" }
