@@ -1,402 +1,4 @@
-// Root
-
-FILE = { SOI ~ SCRIPT ~ EOI }
-
-// ***  LEXICAL GRAMMAR *** //
-
-// Input
-
-INPUT_FILE       =  { INPUT_ELEMENT+ }
-INPUT_ELEMENT    = _{ COMMENT | WHITE_SPACE | TOKEN }
-INPUT_CHARACTERS = _{ INPUT_CHARACTER+ }
-INPUT_CHARACTER  = _{ (!NEW_LINE ~ ANY) }
-
-// Comments
-
-COMMENT             = _{ SINGLE_LINE_COMMENT | DELIMITED_COMMENT }
-SINGLE_LINE_COMMENT = _{ "//" ~ INPUT_CHARACTERS? }
-DELIMITED_COMMENT   = _{ "/*" ~ (!"*/" ~ ANY)* ~ "*/" }
-
-// Whitespace
-
-WHITE_SPACE           = _{ WHITE_SPACE_CHARACTER+ }
-WHITE_SPACE_CHARACTER = _{ NEW_LINE | " " | "\t" }
-NEW_LINE              = _{ "\r" | "\n" | "\r\n" }
-
-// Tokens
-
-TOKEN = {
-    VARIABLE_NAME
-  | NAME
-  | KEYWORD
-  | INTEGER_LITERAL
-  | FLOATING_LITERAL
-  | STRING_LITERAL
-  | OPERATOR_OR_PUNCTUATOR
-}
-
-// Names
-
-VARIABLE_NAME              =  { "$" ~ NAME }
-NAMESPACE_NAME             =  { NAME ~ ("\\" ~ NAME)* }
-NAMESPACE_NAME_AS_A_PREFIX =  {
-    "\\"
-  | ("\\"? ~ NAMESPACE_NAME ~ "\\")
-  | ("namespace" ~ "\\")
-  | ("namespace" ~ "\\" ~ NAMESPACE_NAME ~ "\\")
-}
-QUALIFIED_NAME             =  { NAMESPACE_NAME_AS_A_PREFIX? ~ NAME }
-NAME                       =  { NAME_NONDIGIT ~ (NAME_NONDIGIT | ASCII_DIGIT)* }
-NAME_NONDIGIT              = _{ NONDIGIT | '\u{80}'..'\u{FF}' }
-NONDIGIT                   = _{ "_" | ASCII_ALPHA }
-
-// Keywords
-
-KEYWORD      = {
-    ABSTRACT
-  | AND
-  | ARRAY
-  | AS
-  | BREAK
-  | CALLABLE
-  | CASE
-  | CATCH
-  | CLASS
-  | CLONE
-  | CONST
-  | CONTINUE
-  | DECLARE
-  | DEFAULT
-  | DIE
-  | DO
-  | ECHO
-  | ELSE
-  | ELSEIF
-  | EMPTY
-  | ENDDECLARE
-  | ENDFOR
-  | ENDFOREACH
-  | ENDIF
-  | ENDSWITCH
-  | ENDWHILE
-  | EVAL
-  | EXIT
-  | EXTENDS
-  | FINAL
-  | FINALLY
-  | FOR
-  | FOREACH
-  | FUNCTION
-  | GLOBAL
-  | GOTO
-  | IF
-  | IMPLEMENTS
-  | INCLUDE
-  | INCLUDE_ONCE
-  | INSTANCEOF
-  | INSTEADOF
-  | INTERFACE
-  | ISSET
-  | LIST
-  | NAMESPACE
-  | NEW
-  | OR
-  | PRINT
-  | PRIVATE
-  | PROTECTED
-  | PUBLIC
-  | REQUIRE
-  | REQUIRE_ONCE
-  | RETURN
-  | STATIC
-  | SWITCH
-  | THROW
-  | TRAIT
-  | TRY
-  | UNSET
-  | USE
-  | VAR
-  | WHILE
-  | XOR
-  | YIELD
-  | YIELD_FROM
-}
-ABSTRACT     = { "abstract" }
-AND          = { "and" }
-ARRAY        = { "array" }
-AS           = { "as" }
-BREAK        = { "break" }
-CALLABLE     = { "callable" }
-CASE         = { "case" }
-CATCH        = { "catch" }
-CLASS        = { "class" }
-CLONE        = { "clone" }
-CONST        = { "const" }
-CONTINUE     = { "continue" }
-DECLARE      = { "declare" }
-DEFAULT      = { "default" }
-DIE          = { "die" }
-DO           = { "do" }
-ECHO         = { "echo" }
-ELSE         = { "else" }
-ELSEIF       = { "elseif" }
-EMPTY        = { "empty" }
-ENDDECLARE   = { "enddeclare" }
-ENDFOR       = { "endfor" }
-ENDFOREACH   = { "endforeach" }
-ENDIF        = { "endif" }
-ENDSWITCH    = { "endswitch" }
-ENDWHILE     = { "endwhile" }
-EVAL         = { "eval" }
-EXIT         = { "exit" }
-EXTENDS      = { "extends" }
-FINAL        = { "final" }
-FINALLY      = { "finally" }
-FOR          = { "for" }
-FOREACH      = { "foreach" }
-FUNCTION     = { "function" }
-GLOBAL       = { "global" }
-GOTO         = { "goto" }
-IF           = { "if" }
-IMPLEMENTS   = { "implements" }
-INCLUDE      = { "include" }
-INCLUDE_ONCE = { "include_once" }
-INSTANCEOF   = { "instanceof" }
-INSTEADOF    = { "insteadof" }
-INTERFACE    = { "interface" }
-ISSET        = { "isset" }
-LIST         = { "list" }
-NAMESPACE    = { "namespace" }
-NEW          = { "new" }
-OR           = { "or" }
-PRINT        = { "print" }
-PRIVATE      = { "private" }
-PROTECTED    = { "protected" }
-PUBLIC       = { "public" }
-REQUIRE      = { "require" }
-REQUIRE_ONCE = { "require_once" }
-RETURN       = { "return" }
-STATIC       = { "static" }
-SWITCH       = { "switch" }
-THROW        = { "throw" }
-TRAIT        = { "trait" }
-TRY          = { "try" }
-UNSET        = { "unset" }
-USE          = { "use" }
-VAR          = { "var" }
-WHILE        = { "while" }
-XOR          = { "xor" }
-YIELD        = { "yield" }
-YIELD_FROM   = { "yield from" }
-
-// Integer Literal
-
-INTEGER_LITERAL     = {
-    DECIMAL_LITERAL
-  | OCTAL_LITERAL
-  | HEXADECIMAL_LITERAL
-  | BINARY_LITERAL
-}
-DECIMAL_LITERAL     = { ASCII_NONZERO_DIGIT ~ ASCII_DIGIT* }
-OCTAL_LITERAL       = { "0" ~ ASCII_OCT_DIGIT+ }
-HEXADECIMAL_LITERAL = { "0" ~ ^"x" ~ ASCII_HEX_DIGIT+ }
-BINARY_LITERAL      = { "0" ~ ^"b" ~ ASCII_BIN_DIGIT+ }
-
-// Floating Literal
-
-FLOATING_LITERAL   =  { (FRACTIONAL_LITERAL ~ EXPONENT_PART?) | (ASCII_DIGIT+ ~ EXPONENT_PART) }
-FRACTIONAL_LITERAL =  { (ASCII_DIGIT* ~ "." ~ ASCII_DIGIT+) | (ASCII_DIGIT+ ~ ".") }
-EXPONENT_PART      = _{ ^"e" ~ SIGN? ~ ASCII_DIGIT+ }
-SIGN               =  { "+" | "-" }
-
-// String Literal
-
-STRING_LITERAL                            =  {
-    SINGLE_QUOTED_STRING_LITERAL
-  | DOUBLE_QUOTED_STRING_LITERAL
-  | HEREDOC_STRING_LITERAL
-  | NOWDOC_STRING_LITERAL
-}
-SINGLE_QUOTED_STRING_LITERAL              =  { BINARY_PREFIX? ~ "'" ~ SINGLE_QUOTED_CHARACTER* ~ "'" }
-SINGLE_QUOTED_CHARACTER                   =  { SINGLE_QUOTED_ESCAPE_SEQUENCE | !("'" | "\\") ~ ANY }
-SINGLE_QUOTED_ESCAPE_SEQUENCE             =  { "\\'" | "\\\\" }
-BINARY_PREFIX                             =  { ^"b" }
-DOUBLE_QUOTED_STRING_LITERAL              =  { BINARY_PREFIX? ~ "\"" ~ DOUBLE_QUOTED_CHARACTER* ~ "\"" }
-DOUBLE_QUOTED_CHARACTER                   =  {
-    DOUBLE_QUOTED_ESCAPE_SEQUENCE
-  | !("\"" | "\\") ~ ANY
-  | "\\" ~ !("\"" | "\\" | "$" | "e" | "f" | "n" | "r" | "t" | "v" | ^"x" | ASCII_OCT_DIGIT) ~ ANY
-}
-DOUBLE_QUOTED_ESCAPE_SEQUENCE             =  {
-    DOUBLE_QUOTED_SIMPLE_ESCAPE_SEQUENCE
-  | DOUBLE_QUOTED_OCTAL_ESCAPE_SEQUENCE
-  | DOUBLE_QUOTED_HEXADECIMAL_ESCAPE_SEQUENCE
-  | DOUBLE_QUOTED_UNICODE_ESCAPE_SEQUENCE
-}
-DOUBLE_QUOTED_SIMPLE_ESCAPE_SEQUENCE      = _{ "\\\"" | "\\\\" | "\\$" | "\\e" | "\\f" | "\\n" | "\\r" | "\\t" | "\\v" }
-DOUBLE_QUOTED_OCTAL_ESCAPE_SEQUENCE       = _{ "\\" ~ ASCII_OCT_DIGIT{1, 3} }
-DOUBLE_QUOTED_HEXADECIMAL_ESCAPE_SEQUENCE = _{ "\\" ~ ^"x" ~ ASCII_HEX_DIGIT{1, 2} }
-DOUBLE_QUOTED_UNICODE_ESCAPE_SEQUENCE     = _{ "\\u" ~ "{" ~ ASCII_HEX_DIGIT+ ~ "}" }
-STRING_VARIABLE                           =  { VARIABLE_NAME ~ OFFSET_OR_PROPERTY? | "{$" ~ EXPRESSION ~ "}" }
-OFFSET_OR_PROPERTY                        =  { OFFSET_IN_STRING | PROPERTY_IN_STRING }
-OFFSET_IN_STRING                          =  { "[" ~ (NAME | VARIABLE_NAME | INTEGER_LITERAL) ~ "]" }
-PROPERTY_IN_STRING                        =  { "->" ~ NAME }
-HEREDOC_STRING_LITERAL                    =  { BINARY_PREFIX? ~ "<<<" ~ HEREDOC_START_IDENTIFIER ~ NEW_LINE ~ HEREDOC_BODY? ~ HEREDOC_END_IDENTIFIER ~ ";"? ~ NEW_LINE }
-HEREDOC_START_IDENTIFIER                  =  { NAME | ("\"") ~ NAME ~ ("\"") }
-HEREDOC_END_IDENTIFIER                    =  { NAME }
-HEREDOC_BODY                              =  { HEREDOC_CHAR* ~ NEW_LINE }
-HEREDOC_CHAR                              = _{
-    HEREDOC_ESCAPE_SEQUENCE
-  | !"\\" ~ ANY
-  | "\\" ~ !("\\" | "$" | "e" | "f" | "n" | "r" | "t" | "v" | ^"x" | ASCII_OCT_DIGIT) ~ ANY
-}
-HEREDOC_ESCAPE_SEQUENCE                   =  {
-    HEREDOC_SIMPLE_ESCAPE_SEQUENCE
-  | DOUBLE_QUOTED_OCTAL_ESCAPE_SEQUENCE
-  | DOUBLE_QUOTED_HEXADECIMAL_ESCAPE_SEQUENCE
-  | DOUBLE_QUOTED_UNICODE_ESCAPE_SEQUENCE
-}
-HEREDOC_SIMPLE_ESCAPE_SEQUENCE            = _{ "\\\\" | "\\$" | "\\e" | "\\f" | "\\n" | "\\r" | "\\t" | "\\v" }
-NOWDOC_STRING_LITERAL                     =  { BINARY_PREFIX? ~ "<<<" ~ "'" ~ NAME ~ "'" ~ NEW_LINE ~ HEREDOC_BODY? ~ NAME ~ ";"? ~ NEW_LINE }
-
-// Operators and Punctuators
-
-OPERATOR_OR_PUNCTUATOR = _{
-    DOT
-  | OBJECT_ARROW
-  | INCREMENT
-  | DECREMENT
-  | EXPONENTIATION
-  | MULTIPLICATION
-  | ADDITION
-  | SUBTRACTION
-  | BITWISE_NOT
-  | LOGICAL_NOT
-  | DIVISION
-  | MODULUS
-  | BITWISE_LEFT_SHIFT
-  | BITWISE_RIGHT_SHIFT
-  | LESS_THAN
-  | GREATER_THAN
-  | LESS_THAN_OR_EQUAL
-  | GREATER_THAN_OR_EQUAL
-  | EQUALITY
-  | IDENTITY
-  | INEQUALITY
-  | NON_IDENTITY
-  | BITWISE_XOR
-  | BITWISE_OR
-  | BITWISE_AND
-  | LOGICAL_AND
-  | LOGICAL_OR
-  | TERNARY_CONDITION
-  | TERNARY_SEPARATOR
-  | ASSIGNMENT
-  | EXPONENTIATION_ASSIGNMENT
-  | MULTIPLICATION_ASSIGNMENT
-  | DIVISION_ASSIGNMENT
-  | MODULUS_ASSIGNMENT
-  | ADDITION_ASSIGNMENT
-  | SUBTRACTION_ASSIGNMENT
-  | CONCATENATION_ASSIGNMENT
-  | BITWISE_LEFT_SHIFT_ASSIGNMENT
-  | BITWISE_RIGHT_SHIFT_ASSIGNMENT
-  | BITWISE_AND_ASSIGNMENT
-  | BITWISE_XOR_ASSIGNMENT
-  | BITWISE_OR_ASSIGNMENT
-  | NULL_COALESCING
-  | SCOPE_RESOLUTION
-  | ARRAY_ARROW
-  | SPACESHIP
-  | ELLIPSIS
-  | LEFT_SQUARE_BRACKET
-  | RIGHT_SQUARE_BRACKET
-  | LEFT_PARENTHESIS
-  | RIGHT_PARENTHESIS
-  | LEFT_CURLY_BRACE
-  | RIGHT_CURLY_BRACE
-  | VARIABLE_SYMBOL
-  | LIST_SEPARATOR
-  | STATEMENT_TERMINATOR
-  | NAMESPACE_SEPARATOR
-  | SINGLE_QUOTE
-  | DOUBLE_QUOTE
-  | BACKTICK
-  | AT
-}
-
-DOT                            = { "." }
-OBJECT_ARROW                   = { "->" }
-INCREMENT                      = { "++" }
-DECREMENT                      = { "--" }
-EXPONENTIATION                 = { "**" }
-MULTIPLICATION                 = { "*" }
-ADDITION                       = { "+" }
-SUBTRACTION                    = { "-" }
-BITWISE_NOT                    = { "~" }
-LOGICAL_NOT                    = { "!" }
-DIVISION                       = { "/" }
-MODULUS                        = { "%" }
-BITWISE_LEFT_SHIFT             = { "<<" }
-BITWISE_RIGHT_SHIFT            = { ">>" }
-LESS_THAN                      = { "<" }
-GREATER_THAN                   = { ">" }
-LESS_THAN_OR_EQUAL             = { "<=" }
-GREATER_THAN_OR_EQUAL          = { ">=" }
-EQUALITY                       = { "==" }
-IDENTITY                       = { "===" }
-INEQUALITY                     = { "!=" }
-NON_IDENTITY                   = { "!==" }
-BITWISE_XOR                    = { "^" }
-BITWISE_OR                     = { "|" }
-BITWISE_AND                    = { "&" }
-LOGICAL_AND                    = { "&&" }
-LOGICAL_OR                     = { "||" }
-TERNARY_CONDITION              = { "?" }
-TERNARY_SEPARATOR              = { ":" }
-ASSIGNMENT                     = { "=" }
-EXPONENTIATION_ASSIGNMENT      = { "**=" }
-MULTIPLICATION_ASSIGNMENT      = { "*=" }
-DIVISION_ASSIGNMENT            = { "/=" }
-MODULUS_ASSIGNMENT             = { "%=" }
-ADDITION_ASSIGNMENT            = { "+=" }
-SUBTRACTION_ASSIGNMENT         = { "-=" }
-CONCATENATION_ASSIGNMENT       = { ".=" }
-BITWISE_LEFT_SHIFT_ASSIGNMENT  = { "<<=" }
-BITWISE_RIGHT_SHIFT_ASSIGNMENT = { ">>=" }
-BITWISE_AND_ASSIGNMENT         = { "&=" }
-BITWISE_XOR_ASSIGNMENT         = { "^=" }
-BITWISE_OR_ASSIGNMENT          = { "|=" }
-NULL_COALESCING                = { "??" }
-SCOPE_RESOLUTION               = { "::" }
-ARRAY_ARROW                    = { "=>" }
-SPACESHIP                      = { "<=>" }
-ELLIPSIS                       = { "..." }
-LEFT_SQUARE_BRACKET            = { "[" }
-RIGHT_SQUARE_BRACKET           = { "]" }
-LEFT_PARENTHESIS               = { "(" }
-RIGHT_PARENTHESIS              = { ")" }
-LEFT_CURLY_BRACE               = { "{" }
-RIGHT_CURLY_BRACE              = { "}" }
-VARIABLE_SYMBOL                = { "$" }
-LIST_SEPARATOR                 = { "," }
-STATEMENT_TERMINATOR           = { ";" }
-NAMESPACE_SEPARATOR            = { "\\" }
-SINGLE_QUOTE                   = { "'" }
-DOUBLE_QUOTE                   = { "\"" }
-BACKTICK                       = { "`" }
-AT                             = { "@" }
-
 // ***  SYNTATIC GRAMMAR *** //
-
-// Basics
-
-SCRIPT          = { SCRIPT_SECTION+ }
-SCRIPT_SECTION  = { TEXT ~ START_TAG ~ SECTION_CONTENT ~ END_TAG? ~ TEXT }
-SECTION_CONTENT = { (!END_TAG ~ ANY)* }
-START_TAG       = { "<?php" | "<?=" }
-END_TAG         = { "?>" }
-TEXT            = { (!START_TAG ~ ANY)* }
 
 // Variables
 
@@ -482,6 +84,8 @@ NEW_VARIABLE_SUFFIX                    = _{
   | "->" ~ MEMBER_NAME
   | "::" ~ SIMPLE_VARIABLE
 }
+ARRAY_CREATION_EXPRESSION              =  { "array" ~ "(" ~ ARRAY_INITIALIZER ~ ")" | "[" ~ ARRAY_INITIALIZER ~ "]" }
+ARRAY_INITIALIZER                      =  { ARRAY_INITIALIZER_LIST ~ ","? }
 ARRAY_INITIALIZER_LIST                 =  { ARRAY_ELEMENT_INITIALIZER ~ ("," ~ ARRAY_ELEMENT_INITIALIZER)* }
 ARRAY_ELEMENT_INITIALIZER              = _{
     "&"? ~ ELEMENT_VALUE
@@ -489,10 +93,7 @@ ARRAY_ELEMENT_INITIALIZER              = _{
 }
 ELEMENT_KEY                            =  { EXPRESSION }
 ELEMENT_VALUE                          =  { EXPRESSION }
-SUBSCRIPT_EXPRESSION                   =  {
-    DEREFERENCABLE_EXPRESSION ~ "[" ~ EXPRESSION? ~ "]"
-  | DEREFERENCABLE_EXPRESSION ~ "{" ~ EXPRESSION ~ "}"
-}
+SUBSCRIPT_EXPRESSION                   =  { DEREFERENCABLE_EXPRESSION ~ ("[" ~ EXPRESSION? ~ "]" | "{" ~ EXPRESSION ~ "}") }
 FUNCTION_CALL_EXPRESSION               =  { (QUALIFIED_NAME | CALLABLE_EXPRESSION) ~ "(" ~ (ARGUMENT_EXPRESSION_LIST? | ARGUMENT_EXPRESSION_LIST ~ ",") ~ ")" }
 ARGUMENT_EXPRESSION_LIST               =  { ARGUMENT_EXPRESSION ~ ("," ~ ARGUMENT_EXPRESSION)* }
 ARGUMENT_EXPRESSION                    =  { VARIADIC_UNPACKING | EXPRESSION }
@@ -504,7 +105,7 @@ POSTFIX_INCREMENT_EXPRESSION           =  { VARIABLE ~ "++" }
 POSTFIX_DECREMENT_EXPRESSION           =  { VARIABLE ~ "--" }
 PREFIX_INCREMENT_EXPRESSION            =  { "++" ~ VARIABLE }
 PREFIX_DECREMENT_EXPRESSION            =  { "--" ~ VARIABLE }
-SHELL_COMMAND_EXPRESSION               =  { "`" ~ DQ_CHAR_SEQUENCE? ~ "`" }
+SHELL_COMMAND_EXPRESSION               =  { "`" ~ DOUBLE_QUOTED_CHARACTER* ~ "`" }
 SCOPED_PROPERTY_ACCESS_EXPRESSION      =  { SCOPE_RESOLUTION_QUALIFIER ~ "::" ~ SIMPLE_VARIABLE }
 SCOPED_CALL_EXPRESSION                 =  { SCOPE_RESOLUTION_QUALIFIER ~ "::" ~ MEMBER_NAME ~ "(" ~ (ARGUMENT_EXPRESSION_LIST? | ARGUMENT_EXPRESSION_LIST ~ ",") ~ ")" }
 CLASS_CONSTANT_ACCESS_EXPRESSION       =  { SCOPE_RESOLUTION_QUALIFIER ~ "::" ~ NAME }
@@ -678,3 +279,92 @@ TYPE_DECLARATION                  = { "?"? ~ BASE_TYPE_DECLARATION }
 BASE_TYPE_DECLARATION             = { "array" | "callable" | "iterable" | SCALAR_TYPE | QUALIFIED_NAME }
 SCALAR_TYPE                       = { "bool" | "float" | "int" | "string" }
 DEFAULT_ARGUMENT_SPECIFIER        = { "=" ~ CONSTANT_EXPRESSION }
+
+// Classes
+
+CLASS_DECLARATION         = { CLASS_MODIFIER? ~ "class" ~ NAME ~ CLASS_BASE_CLAUSE? ~ CLASS_INTERFACE_CLAUSE? ~ "{" ~ CLASS_MEMBER_DECLARATIONS? ~ "}" }
+CLASS_MODIFIER            = { "abstract" | "final" }
+CLASS_BASE_CLAUSE         = { "extends" ~ QUALIFIED_NAME }
+CLASS_INTERFACE_CLAUSE    = { "implements" ~ QUALIFIED_NAME ~ ("," ~ QUALIFIED_NAME)* }
+CLASS_MEMBER_DECLARATIONS = { CLASS_MEMBER_DECLARATION+ }
+CLASS_MEMBER_DECLARATION  = {
+    CLASS_CONST_DECLARATION
+  | PROPERTY_DECLARATION
+  | METHOD_DECLARATION
+  | CONSTRUCTOR_DECLARATION
+  | DESTRUCTOR_DECLARATION
+  | TRAIT_USE_CLAUSE
+}
+CONST_DECLARATION         = { "const" ~ CONST_ELEMENTS ~ ";" }
+CLASS_CONST_DECLARATION   = { VISIBILITY_MODIFIER? ~ "const" ~ CONST_ELEMENTS ~ ";" }
+CONST_ELEMENTS            = { CONST_ELEMENT ~ ("," ~ CONST_ELEMENT)* }
+CONST_ELEMENT             = { NAME ~ "=" ~ CONSTANT_EXPRESSION }
+PROPERTY_DECLARATION      = { PROPERTY_MODIFIER ~ PROPERTY_ELEMENTS ~ ";" }
+PROPERTY_MODIFIER         = {
+    "var"
+  | VISIBILITY_MODIFIER ~ STATIC_MODIFIER?
+  | STATIC_MODIFIER ~ VISIBILITY_MODIFIER?
+}
+VISIBILITY_MODIFIER       = { "public" | "protected" | "private" }
+STATIC_MODIFIER           = { "static" }
+PROPERTY_ELEMENTS         = { PROPERTY_ELEMENT+ }
+PROPERTY_ELEMENT          = { VARIABLE_NAME ~ PROPERTY_INITIALIZER? ~ ";" }
+PROPERTY_INITIALIZER      = { "=" ~ CONSTANT_EXPRESSION }
+METHOD_DECLARATION        = {
+    METHOD_MODIFIERS? ~ FUNCTION_DEFINITION
+  | METHOD_MODIFIERS ~ FUNCTION_DEFINITION_HEADER ~ ";"
+}
+METHOD_MODIFIERS          = { METHOD_MODIFIER+ }
+METHOD_MODIFIER           = { VISIBILITY_MODIFIER | STATIC_MODIFIER | CLASS_MODIFIER }
+CONSTRUCTOR_DECLARATION   = { METHOD_MODIFIERS ~ "function" ~ "&"? ~ "__construct" ~ "(" ~ PARAMETER_DECLARATION_LIST? ~ ")" ~ COMPOUND_STATEMENT }
+DESTRUCTOR_DECLARATION    = { METHOD_MODIFIERS ~ "function" ~ "&"? ~ "__destruct" ~ "(" ~ ")" ~ COMPOUND_STATEMENT }
+
+// Interfaces
+
+INTERFACE_DECLARATION         = { "interface" ~ NAME ~ INTERFACE_BASE_CLAUSE? ~ "{" ~ INTERFACE_MEMBER_DECLARATIONS? ~ "}" }
+INTERFACE_BASE_CLAUSE         = { "extends" ~ QUALIFIED_NAME ~ ("," ~ QUALIFIED_NAME)* }
+INTERFACE_MEMBER_DECLARATIONS = { INTERFACE_MEMBER_DECLARATION+ }
+INTERFACE_MEMBER_DECLARATION  = { CLASS_CONST_DECLARATION | METHOD_DECLARATION }
+
+// Traits
+
+TRAIT_DECLARATION              = { "trait" ~ NAME ~ "{" ~ TRAIT_MEMBER_DECLARATIONS? ~ "}" }
+TRAIT_MEMBER_DECLARATIONS      = { TRAIT_MEMBER_DECLARATION+ }
+TRAIT_MEMBER_DECLARATION       = {
+    PROPERTY_DECLARATION
+  | METHOD_DECLARATION
+  | CONSTRUCTOR_DECLARATION
+  | DESTRUCTOR_DECLARATION
+  | TRAIT_USE_CLAUSES
+}
+TRAIT_USE_CLAUSES              = { TRAIT_USE_CLAUSE+ }
+TRAIT_USE_CLAUSE               = { "use" ~ TRAIT_NAME_LIST ~ TRAIT_USE_SPECIFICATION }
+TRAIT_NAME_LIST                = { QUALIFIED_NAME ~ ("," ~ QUALIFIED_NAME)* }
+TRAIT_USE_SPECIFICATION        = { ";" | "{" ~ TRAIT_SELECT_AND_ALIAS_CLAUSES? ~ "}" }
+TRAIT_SELECT_AND_ALIAS_CLAUSES = { TRAIT_SELECT_AND_ALIAS_CLAUSE+ }
+TRAIT_SELECT_AND_ALIAS_CLAUSE  = { TRAIT_SELECT_INSTEADOF_CLAUSE ~ ";" | TRAIT_ALIAS_AS_CLAUSE ~ ";" }
+TRAIT_SELECT_INSTEADOF_CLAUSE  = { QUALIFIED_NAME ~ "::" ~ NAME ~ "insteadof" ~ TRAIT_NAME_LIST }
+TRAIT_ALIAS_AS_CLAUSE          = {
+    NAME ~ "as" ~ VISIBILITY_MODIFIER? ~ NAME
+  | NAME ~ "as" ~ VISIBILITY_MODIFIER ~ NAME?
+}
+
+// Namespaces
+
+NAMESPACE_DEFINITION          = {
+    "namespace" ~ NAMESPACE_NAME ~ ";"
+  | "namespace" ~ NAMESPACE_NAME? ~ COMPOUND_STATEMENT
+}
+NAMESPACE_USE_DECLARATION     = {
+    "use" ~ NAMESPACE_FUNCTION_OR_CONST? ~ NAMESPACE_USE_CLAUSES ~ ";"
+  | "use" ~ NAMESPACE_FUNCTION_OR_CONST ~ "\\"? ~ NAMESPACE_NAME ~ "\\" ~ "{" ~ NAMESPACE_USE_GROUP_CLAUSES_1 ~ "}" ~ ";"
+  | "use" ~ "\\"? ~ NAMESPACE_NAME ~ "\\" ~ "{" ~ NAMESPACE_USE_GROUP_CLAUSES_2 ~ "}" ~ ";"
+}
+NAMESPACE_USE_CLAUSES         = { NAMESPACE_USE_CLAUSE ~ ("," ~ NAMESPACE_USE_CLAUSE)* }
+NAMESPACE_USE_CLAUSE          = { QUALIFIED_NAME ~ NAMESPACE_ALIASING_CLAUSE? }
+NAMESPACE_ALIASING_CLAUSE     = { "as" ~ NAME }
+NAMESPACE_FUNCTION_OR_CONST   = { "function" | "const" }
+NAMESPACE_USE_GROUP_CLAUSES_1 = { NAMESPACE_USE_GROUP_CLAUSE_1 ~ ("," ~ NAMESPACE_USE_GROUP_CLAUSE_1)* }
+NAMESPACE_USE_GROUP_CLAUSE_1  = { NAMESPACE_NAME ~ NAMESPACE_ALIASING_CLAUSE? }
+NAMESPACE_USE_GROUP_CLAUSES_2 = { NAMESPACE_USE_GROUP_CLAUSE_2 ~ ("," ~ NAMESPACE_USE_GROUP_CLAUSE_2)* }
+NAMESPACE_USE_GROUP_CLAUSE_2  = { NAMESPACE_FUNCTION_OR_CONST? ~ NAMESPACE_NAME ~ NAMESPACE_ALIASING_CLAUSE? }

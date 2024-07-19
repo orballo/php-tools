@@ -1,0 +1,141 @@
+OPERATOR = {
+    ARITHMETIC_OPERATOR
+  | INCREMENT_OR_DECREMENT_OPERATOR
+  | BITWISE_OPERATOR
+  | COMPARISON_OPERATOR
+  | LOGICAL_OPERATOR
+  | ASSIGNMENT_OPERATOR
+  | CONCATENATION
+  | NULL_COALESCE
+  | TERNARY_IF_THEN
+  | TERNARY_IF_NOT
+  | INSTANCEOF
+  | NEW
+  | CLONE
+}
+
+// Arithmetic Operators
+
+ARITHMETIC_OPERATOR = _{
+    PLUS
+  | MINUS
+  | MULTIPLY
+  | DIVIDE
+  | MODULUS
+  | EXPONENT
+}
+
+PLUS     = @{ "+" }
+MINUS    = @{ "-" }
+MULTIPLY = @{ "*" }
+DIVIDE   = @{ "/" }
+MODULUS  = @{ "%" }
+EXPONENT = @{ "**" }
+
+// Increment/Decrement Operators
+
+INCREMENT_OR_DECREMENT_OPERATOR = _{
+    INCREMENT
+  | DECREMENT
+}
+
+INCREMENT = @{ "++" }
+DECREMENT = @{ "--" }
+
+// Bitwise Operators
+
+BITWISE_OPERATOR = _{
+    BITWISE_AND
+  | BITWISE_OR
+  | BITWISE_XOR
+  | BITWISE_NOT
+  | LEFT_SHIFT
+  | RIGHT_SHIFT
+}
+
+BITWISE_AND = @{ "&" }
+BITWISE_OR  = @{ "|" }
+BITWISE_XOR = @{ "^" }
+BITWISE_NOT = @{ "~" }
+LEFT_SHIFT  = @{ "<<" }
+RIGHT_SHIFT = @{ ">>" }
+
+// Comparison Operators
+
+COMPARISON_OPERATOR = _{
+    EQUAL
+  | IDENTICAL
+  | NOT_EQUAL
+  | NOT_IDENTICAL
+  | LESS_THAN
+  | GREATER_THAN
+  | LESS_EQUAL
+  | GREATER_EQUAL
+  | SPACESHIP
+}
+
+EQUAL         = @{ "==" }
+IDENTICAL     = @{ "===" }
+NOT_EQUAL     = @{ "!=" }
+NOT_IDENTICAL = @{ "!==" }
+LESS_THAN     = @{ "<" }
+GREATER_THAN  = @{ ">" }
+LESS_EQUAL    = @{ "<=" }
+GREATER_EQUAL = @{ ">=" }
+SPACESHIP     = @{ "<=>" }
+
+// Logical Operators
+
+LOGICAL_OPERATOR = _{
+    LOGICAL_AND
+  | LOGICAL_OR
+  | LOGICAL_NOT
+  | AND
+  | OR
+  | XOR
+}
+
+LOGICAL_AND = @{ "&&" }
+LOGICAL_OR  = @{ "||" }
+LOGICAL_NOT = @{ "!" }
+
+// Assignment Operators
+
+ASSIGNMENT_OPERATOR = _{
+    ASSIGN
+  | PLUS_ASSIGN
+  | MINUS_ASSIGN
+  | MULTIPLY_ASSIGN
+  | DIVIDE_ASSIGN
+  | MODULUS_ASSIGN
+  | CONCAT_ASSIGN
+  | BITWISE_AND_ASSIGN
+  | BITWISE_OR_ASSIGN
+  | BITWISE_XOR_ASSIGN
+  | LEFT_SHIFT_ASSIGN
+  | RIGHT_SHIFT_ASSIGN
+  | EXPONENT_ASSIGN
+  | NULL_COALESCE_ASSIGN
+}
+
+ASSIGN               = @{ "=" }
+PLUS_ASSIGN          = @{ "+=" }
+MINUS_ASSIGN         = @{ "-=" }
+MULTIPLY_ASSIGN      = @{ "*=" }
+DIVIDE_ASSIGN        = @{ "/=" }
+MODULUS_ASSIGN       = @{ "%=" }
+CONCAT_ASSIGN        = @{ ".=" }
+BITWISE_AND_ASSIGN   = @{ "&=" }
+BITWISE_OR_ASSIGN    = @{ "|=" }
+BITWISE_XOR_ASSIGN   = @{ "^=" }
+LEFT_SHIFT_ASSIGN    = @{ "<<=" }
+RIGHT_SHIFT_ASSIGN   = @{ ">>=" }
+EXPONENT_ASSIGN      = @{ "**=" }
+NULL_COALESCE_ASSIGN = @{ "??=" }
+
+// Other Operators
+
+CONCATENATION   = @{ "." }
+NULL_COALESCE   = @{ "??" }
+TERNARY_IF_THEN = @{ "?" }
+TERNARY_IF_NOT  = @{ ":" }

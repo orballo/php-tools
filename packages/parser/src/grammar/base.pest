@@ -1,0 +1,26 @@
+FILE = { SOI ~ SCRIPT ~ EOI }
+
+SCRIPT          = { SCRIPT_SECTION+ }
+SCRIPT_SECTION  = { TEXT? ~ START_TAG ~ SCRIPT_ELEMENTS? ~ END_TAG? ~ TEXT? }
+SCRIPT_ELEMENTS = { (!END_TAG ~ SCRIPT_ELEMENT)+ }
+SCRIPT_ELEMENT  = { COMMENT | WHITE_SPACE | TOKEN }
+START_TAG       = { "<?php" | "<?=" }
+END_TAG         = { "?>" }
+TEXT            = { (!START_TAG ~ ANY)+ }
+
+COMMENT             =  { SINGLE_LINE_COMMENT | DELIMITED_COMMENT }
+SINGLE_LINE_COMMENT = @{ "//" ~ (!NEW_LINE ~ ANY)* }
+DELIMITED_COMMENT   = @{ "/*" ~ (!"*/" ~ ANY)* ~ "*/" }
+
+WHITE_SPACE           = _{ WHITE_SPACE_CHARACTER+ }
+WHITE_SPACE_CHARACTER = _{ NEW_LINE | " " | "\t" }
+NEW_LINE              = _{ "\r" | "\n" | "\r\n" }
+
+TOKEN = {
+    VARIABLE_NAME
+  | NAME
+  | KEYWORD
+  | LITERAL
+  | OPERATOR
+  | PUNCTUATOR
+}
