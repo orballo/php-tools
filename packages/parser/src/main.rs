@@ -1,5 +1,6 @@
 use pest::Parser;
 use pest_derive::Parser;
+use serde_json::{json, Value};
 use std::fs;
 
 #[derive(Parser)]
@@ -17,4 +18,11 @@ pub fn main() {
     let file = PHPParser::parse(Rule::FILE, &file_content).expect("Failed to parse");
 
     eprintln!("file = {:#?}", file);
+
+    let pretty_string = format!("{:#?}", file);
+    let json: Value = json!(file);
+    let pretty_json = serde_json::to_string_pretty(&json).expect("failed to strngify json");
+
+    _ = fs::write("pest-output.txt", pretty_string);
+    _ = fs::write("output-output.json", pretty_json);
 }
