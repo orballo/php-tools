@@ -1,0 +1,124 @@
+---
+source: packages/parser/tests/lexical_grammar.rs
+expression: parsed_file.next().unwrap()
+input_file: packages/parser/tests/fixtures/string_literals.php
+---
+Pair {
+    rule: SCRIPT,
+    span: Span {
+        str: "<?php\n\n// Single Quoted String Literals\n\n'This is a single quoted string literal';\n'This is a single quoted string literal with an escaped single quote: \\'';\n'This is a single quoted string literal with an escaped backslash: \\\\';\n'This is a single quoted string literal with a newline: \\n';\nb'This is a single quoted binary string literal';",
+        start: 0,
+        end: 340,
+    },
+    inner: [
+        Pair {
+            rule: SCRIPT_SECTION,
+            span: Span {
+                str: "<?php\n\n// Single Quoted String Literals\n\n'This is a single quoted string literal';\n'This is a single quoted string literal with an escaped single quote: \\'';\n'This is a single quoted string literal with an escaped backslash: \\\\';\n'This is a single quoted string literal with a newline: \\n';\nb'This is a single quoted binary string literal';",
+                start: 0,
+                end: 340,
+            },
+            inner: [
+                Pair {
+                    rule: OPEN_TAG,
+                    span: Span {
+                        str: "<?php",
+                        start: 0,
+                        end: 5,
+                    },
+                    inner: [],
+                },
+                Pair {
+                    rule: SINGLE_QUOTED_STRING_LITERAL,
+                    span: Span {
+                        str: "'This is a single quoted string literal'",
+                        start: 41,
+                        end: 81,
+                    },
+                    inner: [],
+                },
+                Pair {
+                    rule: SEMICOLON,
+                    span: Span {
+                        str: ";",
+                        start: 81,
+                        end: 82,
+                    },
+                    inner: [],
+                },
+                Pair {
+                    rule: SINGLE_QUOTED_STRING_LITERAL,
+                    span: Span {
+                        str: "'This is a single quoted string literal with an escaped single quote: \\''",
+                        start: 83,
+                        end: 156,
+                    },
+                    inner: [],
+                },
+                Pair {
+                    rule: SEMICOLON,
+                    span: Span {
+                        str: ";",
+                        start: 156,
+                        end: 157,
+                    },
+                    inner: [],
+                },
+                Pair {
+                    rule: SINGLE_QUOTED_STRING_LITERAL,
+                    span: Span {
+                        str: "'This is a single quoted string literal with an escaped backslash: \\\\'",
+                        start: 158,
+                        end: 228,
+                    },
+                    inner: [],
+                },
+                Pair {
+                    rule: SEMICOLON,
+                    span: Span {
+                        str: ";",
+                        start: 228,
+                        end: 229,
+                    },
+                    inner: [],
+                },
+                Pair {
+                    rule: SINGLE_QUOTED_STRING_LITERAL,
+                    span: Span {
+                        str: "'This is a single quoted string literal with a newline: \\n'",
+                        start: 230,
+                        end: 289,
+                    },
+                    inner: [],
+                },
+                Pair {
+                    rule: SEMICOLON,
+                    span: Span {
+                        str: ";",
+                        start: 289,
+                        end: 290,
+                    },
+                    inner: [],
+                },
+                Pair {
+                    rule: SINGLE_QUOTED_STRING_LITERAL,
+                    span: Span {
+                        str: "b'This is a single quoted binary string literal'",
+                        start: 291,
+                        end: 339,
+                    },
+                    inner: [],
+                },
+                Pair {
+                    rule: SEMICOLON,
+                    span: Span {
+                        str: ";",
+                        start: 339,
+                        end: 340,
+                    },
+                    inner: [],
+                },
+            ],
+        },
+    ],
+}

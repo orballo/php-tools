@@ -28,9 +28,9 @@ SIGN               =  { "+" | "-" }
 // String Literals
 
 SINGLE_QUOTED_STRING_LITERAL  = @{ BINARY_PREFIX? ~ "'" ~ SINGLE_QUOTED_CHARACTER* ~ "'" }
-SINGLE_QUOTED_CHARACTER       =  { SINGLE_QUOTED_ESCAPE_SEQUENCE | !("'" | "\\") ~ ANY }
+SINGLE_QUOTED_CHARACTER       =  { SINGLE_QUOTED_ESCAPE_SEQUENCE | !("'") ~ ANY }
 SINGLE_QUOTED_ESCAPE_SEQUENCE =  { "\\'" | "\\\\" }
-BINARY_PREFIX                 =  { ^"b" }
+BINARY_PREFIX                 =  { "b" }
 
 DOUBLE_QUOTED_STRING_LITERAL              = @{ BINARY_PREFIX? ~ "\"" ~ DOUBLE_QUOTED_CHARACTER* ~ "\"" }
 DOUBLE_QUOTED_CHARACTER                   =  {
