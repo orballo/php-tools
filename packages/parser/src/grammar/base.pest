@@ -8,8 +8,8 @@ TEXT = ${ (!OPEN_TAG ~ ANY)+ }
 
 // Starting and ending tags of PHP scripts
 
-OPEN_TAG  = { "<?php" | "<?=" | "<?" }
-CLOSE_TAG = { "?>" }
+OPEN_TAG  = @{ "<?php" | "<?=" | "<?" }
+CLOSE_TAG = @{ "?>" }
 
 // Defines the structure of a PHP script section
 
@@ -42,10 +42,10 @@ WHITESPACE = _{ (" " | "\t" | NEWLINE)+ }
 // - names.pest
 
 TOKEN = _{
-    OPERATOR
+    LITERAL
+  | OPERATOR
   | PUNCTUATOR
   | KEYWORD
-  | LITERAL
   | VARIABLE
   | NAME
 }
