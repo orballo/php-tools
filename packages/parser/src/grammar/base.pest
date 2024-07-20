@@ -1,19 +1,15 @@
-// Defines a file structure to know the end of the file
+// Defines the structure of a PHP script
 
-FILE = _{ SOI ~ SCRIPT ~ EOI }
+SCRIPT = @{ SOI ~ TEXT? ~ (SCRIPT_SECTION ~ TEXT?)+ ~ EOI }
+
+// Arbitrary text outside of PHP tags
+
+TEXT = ${ (!OPEN_TAG ~ ANY)+ }
 
 // Starting and ending tags of PHP scripts
 
 OPEN_TAG  = { "<?php" | "<?=" | "<?" }
 CLOSE_TAG = { "?>" }
-
-// Defines the structure of a PHP script
-
-SCRIPT = @{ TEXT? ~ (SCRIPT_SECTION ~ TEXT?)+ }
-
-// Arbitrary text outside of PHP tags
-
-TEXT = ${ (!OPEN_TAG ~ ANY)+ }
 
 // Defines the structure of a PHP script section
 

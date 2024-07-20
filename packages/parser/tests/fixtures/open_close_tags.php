@@ -1,0 +1,1 @@
+<?php 'open close tags' ?>

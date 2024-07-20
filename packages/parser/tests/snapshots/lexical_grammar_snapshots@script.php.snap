@@ -1,0 +1,98 @@
+---
+source: packages/parser/tests/lexical_grammar.rs
+expression: parsed_file.next().unwrap()
+input_file: packages/parser/tests/fixtures/script.php
+---
+Pair {
+    rule: SCRIPT,
+    span: Span {
+        str: "Starting Random Text\n<?php ?>In Between Random Text<?php ?>\nEnding Random Text",
+        start: 0,
+        end: 78,
+    },
+    inner: [
+        Pair {
+            rule: TEXT,
+            span: Span {
+                str: "Starting Random Text\n",
+                start: 0,
+                end: 21,
+            },
+            inner: [],
+        },
+        Pair {
+            rule: SCRIPT_SECTION,
+            span: Span {
+                str: "<?php ?>",
+                start: 21,
+                end: 29,
+            },
+            inner: [
+                Pair {
+                    rule: OPEN_TAG,
+                    span: Span {
+                        str: "<?php",
+                        start: 21,
+                        end: 26,
+                    },
+                    inner: [],
+                },
+                Pair {
+                    rule: CLOSE_TAG,
+                    span: Span {
+                        str: "?>",
+                        start: 27,
+                        end: 29,
+                    },
+                    inner: [],
+                },
+            ],
+        },
+        Pair {
+            rule: TEXT,
+            span: Span {
+                str: "In Between Random Text",
+                start: 29,
+                end: 51,
+            },
+            inner: [],
+        },
+        Pair {
+            rule: SCRIPT_SECTION,
+            span: Span {
+                str: "<?php ?>",
+                start: 51,
+                end: 59,
+            },
+            inner: [
+                Pair {
+                    rule: OPEN_TAG,
+                    span: Span {
+                        str: "<?php",
+                        start: 51,
+                        end: 56,
+                    },
+                    inner: [],
+                },
+                Pair {
+                    rule: CLOSE_TAG,
+                    span: Span {
+                        str: "?>",
+                        start: 57,
+                        end: 59,
+                    },
+                    inner: [],
+                },
+            ],
+        },
+        Pair {
+            rule: TEXT,
+            span: Span {
+                str: "\nEnding Random Text",
+                start: 59,
+                end: 78,
+            },
+            inner: [],
+        },
+    ],
+}

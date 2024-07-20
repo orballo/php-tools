@@ -1,11 +1,11 @@
 @default:
     just --list
 
-@run parser:
-    cargo run --package parser
-
-@test parser:
+@test:
     cargo test \
     --package parser \
     --no-fail-fast \
     --test lexical_grammar
+
+@review:
+    cargo insta review

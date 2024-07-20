@@ -1,0 +1,52 @@
+---
+source: packages/parser/tests/lexical_grammar.rs
+expression: parsed_file.next().unwrap()
+input_file: packages/parser/tests/fixtures/open_close_tags.php
+---
+Pair {
+    rule: SCRIPT,
+    span: Span {
+        str: "<?php 'open close tags' ?>",
+        start: 0,
+        end: 26,
+    },
+    inner: [
+        Pair {
+            rule: SCRIPT_SECTION,
+            span: Span {
+                str: "<?php 'open close tags' ?>",
+                start: 0,
+                end: 26,
+            },
+            inner: [
+                Pair {
+                    rule: OPEN_TAG,
+                    span: Span {
+                        str: "<?php",
+                        start: 0,
+                        end: 5,
+                    },
+                    inner: [],
+                },
+                Pair {
+                    rule: SINGLE_QUOTED_STRING_LITERAL,
+                    span: Span {
+                        str: "'open close tags'",
+                        start: 6,
+                        end: 23,
+                    },
+                    inner: [],
+                },
+                Pair {
+                    rule: CLOSE_TAG,
+                    span: Span {
+                        str: "?>",
+                        start: 24,
+                        end: 26,
+                    },
+                    inner: [],
+                },
+            ],
+        },
+    ],
+}
