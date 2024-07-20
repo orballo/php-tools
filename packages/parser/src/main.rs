@@ -17,13 +17,10 @@ pub fn main() {
         .expect("Failed to read the file");
     let file = PHPParser::parse(Rule::FILE, &file_content).expect("Failed to parse");
     let pretty_string = format!("{:#?}", file);
-    // let json: Value = json!(SerializablePairs(file));
-    // let pretty_json = serde_json::to_string_pretty(&json).expect("failed to strngify json");
 
     let output_path = Path::new("output");
 
     create_dir_all(output_path).expect("Failed to create output path");
 
     fs::write(output_path.join("pairs.txt"), pretty_string).expect("Failed to write `pairs.txt`");
-    // _ = fs::write("output/pairs.json", pretty_json);
 }
