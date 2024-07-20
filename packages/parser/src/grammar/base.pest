@@ -4,8 +4,8 @@ FILE = _{ SOI ~ SCRIPT ~ EOI }
 
 // Starting and ending tags of PHP scripts
 
-START_TAG = { "<?php" | "<?=" }
-END_TAG   = { "?>" }
+OPEN_TAG  = { "<?php" | "<?=" | "<?" }
+CLOSE_TAG = { "?>" }
 
 // Defines the structure of a PHP script
 
@@ -13,12 +13,12 @@ SCRIPT = @{ TEXT? ~ (SCRIPT_SECTION ~ TEXT?)+ }
 
 // Arbitrary text outside of PHP tags
 
-TEXT = ${ (!START_TAG ~ ANY)+ }
+TEXT = ${ (!OPEN_TAG ~ ANY)+ }
 
 // Defines the structure of a PHP script section
 
-SCRIPT_SECTION  = ${ START_TAG ~ SCRIPT_ELEMENTS? ~ END_TAG? }
-SCRIPT_ELEMENTS = _{ (!END_TAG ~ SCRIPT_ELEMENT)+ }
+SCRIPT_SECTION  = ${ OPEN_TAG ~ SCRIPT_ELEMENTS? ~ CLOSE_TAG? }
+SCRIPT_ELEMENTS = _{ (!CLOSE_TAG ~ SCRIPT_ELEMENT)+ }
 SCRIPT_ELEMENT  = _{
     COMMENT
   | WHITESPACE
@@ -28,8 +28,8 @@ SCRIPT_ELEMENT  = _{
 // Comments
 
 COMMENT                   = _{ SINGLE_LINE_COMMENT | SINGLE_LINE_SHELL_COMMENT | DELIMITED_COMMENT }
-SINGLE_LINE_COMMENT       = @{ "//" ~ (!NEWLINE ~ !END_TAG ~ ANY)* }
-SINGLE_LINE_SHELL_COMMENT = @{ "#" ~ (!NEWLINE ~ !END_TAG ~ ANY)* }
+SINGLE_LINE_COMMENT       = @{ "//" ~ (!NEWLINE ~ !CLOSE_TAG ~ ANY)* }
+SINGLE_LINE_SHELL_COMMENT = @{ "#" ~ (!NEWLINE ~ !CLOSE_TAG ~ ANY)* }
 DELIMITED_COMMENT         = @{ "/*" ~ (!"*/" ~ ANY)* ~ "*/" }
 
 // Whitespace
