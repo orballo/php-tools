@@ -8,4 +8,4 @@
     cargo test \
     --package parser \
     --no-fail-fast \
-    --test lexical_grammar \
+    --test lexical_grammar
