@@ -1,4 +1,4 @@
-PUNCTUATOR = {
+PUNCTUATOR = _{
     SEMICOLON
   | COMMA
   | AT

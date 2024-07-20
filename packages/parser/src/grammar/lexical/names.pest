@@ -1,4 +1,4 @@
-VARIABLE_NAME              =  { "$" ~ NAME }
+VARIABLE                   =  { "$" ~ NAME }
 NAMESPACE_NAME             =  { NAME ~ ("\\" ~ NAME)* }
 NAMESPACE_NAME_AS_A_PREFIX =  {
     "\\"

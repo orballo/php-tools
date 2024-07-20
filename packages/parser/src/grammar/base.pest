@@ -1,26 +1,55 @@
-FILE = { SOI ~ SCRIPT ~ EOI }
+// Defines a file structure to know the end of the file
 
-SCRIPT          = { SCRIPT_SECTION+ }
-SCRIPT_SECTION  = { TEXT? ~ START_TAG ~ SCRIPT_ELEMENTS? ~ END_TAG? ~ TEXT? }
-SCRIPT_ELEMENTS = { (!END_TAG ~ SCRIPT_ELEMENT)+ }
-SCRIPT_ELEMENT  = { COMMENT | WHITE_SPACE | TOKEN }
-START_TAG       = { "<?php" | "<?=" }
-END_TAG         = { "?>" }
-TEXT            = { (!START_TAG ~ ANY)+ }
+FILE = _{ SOI ~ SCRIPT ~ EOI }
 
-COMMENT             =  { SINGLE_LINE_COMMENT | DELIMITED_COMMENT }
-SINGLE_LINE_COMMENT = @{ "//" ~ (!NEW_LINE ~ ANY)* }
-DELIMITED_COMMENT   = @{ "/*" ~ (!"*/" ~ ANY)* ~ "*/" }
+// Starting and ending tags of PHP scripts
 
-WHITE_SPACE           = _{ WHITE_SPACE_CHARACTER+ }
-WHITE_SPACE_CHARACTER = _{ NEW_LINE | " " | "\t" }
-NEW_LINE              = _{ "\r" | "\n" | "\r\n" }
+START_TAG = { "<?php" | "<?=" }
+END_TAG   = { "?>" }
 
-TOKEN = {
-    VARIABLE_NAME
-  | NAME
+// Defines the structure of a PHP script
+
+SCRIPT = @{ TEXT? ~ (SCRIPT_SECTION ~ TEXT?)+ }
+
+// Arbitrary text outside of PHP tags
+
+TEXT = ${ (!START_TAG ~ ANY)+ }
+
+// Defines the structure of a PHP script section
+
+SCRIPT_SECTION  = ${ START_TAG ~ SCRIPT_ELEMENTS? ~ END_TAG? }
+SCRIPT_ELEMENTS = _{ (!END_TAG ~ SCRIPT_ELEMENT)+ }
+SCRIPT_ELEMENT  = _{
+    COMMENT
+  | WHITESPACE
+  | TOKEN
+}
+
+// Comments
+
+COMMENT                   = _{ SINGLE_LINE_COMMENT | SINGLE_LINE_SHELL_COMMENT | DELIMITED_COMMENT }
+SINGLE_LINE_COMMENT       = @{ "//" ~ (!NEWLINE ~ !END_TAG ~ ANY)* }
+SINGLE_LINE_SHELL_COMMENT = @{ "#" ~ (!NEWLINE ~ !END_TAG ~ ANY)* }
+DELIMITED_COMMENT         = @{ "/*" ~ (!"*/" ~ ANY)* ~ "*/" }
+
+// Whitespace
+
+WHITESPACE = _{ (" " | "\t" | NEWLINE)+ }
+
+// Tokens
+// 
+// Defined in separate files:
+// - operators.pest
+// - punctuators.pest
+// - keywords.pest
+// - literals.pest
+// - names.pest
+
+TOKEN = _{
+    OPERATOR
+  | PUNCTUATOR
   | KEYWORD
   | LITERAL
-  | OPERATOR
-  | PUNCTUATOR
+  | VARIABLE
+  | NAME
 }

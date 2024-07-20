@@ -53,10 +53,10 @@ DOUBLE_QUOTED_UNICODE_ESCAPE_SEQUENCE     =  { "\\u" ~ "{" ~ ASCII_HEX_DIGIT+ ~ 
 // OFFSET_IN_STRING                          =  { "[" ~ (NAME | VARIABLE_NAME | INTEGER_LITERAL) ~ "]" }
 // PROPERTY_IN_STRING                        =  { "->" ~ NAME }
 
-HEREDOC_STRING_LITERAL         = @{ BINARY_PREFIX? ~ "<<<" ~ HEREDOC_START_IDENTIFIER ~ NEW_LINE ~ HEREDOC_BODY? ~ HEREDOC_END_IDENTIFIER ~ ";"? ~ NEW_LINE }
+HEREDOC_STRING_LITERAL         = @{ BINARY_PREFIX? ~ "<<<" ~ HEREDOC_START_IDENTIFIER ~ NEWLINE ~ HEREDOC_BODY? ~ HEREDOC_END_IDENTIFIER ~ ";"? ~ NEWLINE }
 HEREDOC_START_IDENTIFIER       =  { NAME | ("\"") ~ NAME ~ ("\"") }
 HEREDOC_END_IDENTIFIER         =  { NAME }
-HEREDOC_BODY                   =  { HEREDOC_CHAR* ~ NEW_LINE }
+HEREDOC_BODY                   =  { HEREDOC_CHAR* ~ NEWLINE }
 HEREDOC_CHAR                   =  {
     HEREDOC_ESCAPE_SEQUENCE
   | !"\\" ~ ANY
@@ -70,4 +70,4 @@ HEREDOC_ESCAPE_SEQUENCE        =  {
 }
 HEREDOC_SIMPLE_ESCAPE_SEQUENCE =  { "\\\\" | "\\$" | "\\e" | "\\f" | "\\n" | "\\r" | "\\t" | "\\v" }
 
-NOWDOC_STRING_LITERAL = @{ BINARY_PREFIX? ~ "<<<" ~ "'" ~ NAME ~ "'" ~ NEW_LINE ~ HEREDOC_BODY? ~ NAME ~ ";"? ~ NEW_LINE }
+NOWDOC_STRING_LITERAL = @{ BINARY_PREFIX? ~ "<<<" ~ "'" ~ NAME ~ "'" ~ NEWLINE ~ HEREDOC_BODY? ~ NAME ~ ";"? ~ NEWLINE }

@@ -1,7 +1,9 @@
-use pest::Parser;
+use pest::{iterators::Pairs, Parser, RuleType};
 use pest_derive::Parser;
-use serde_json::{json, Value};
-use std::fs;
+use serde::Serialize;
+use serde_json::json;
+use std::fs::{self, create_dir_all};
+use std::path::Path;
 
 #[derive(Parser)]
 #[grammar = "grammar/base.pest"]
@@ -16,13 +18,14 @@ pub fn main() {
     let file_content = fs::read_to_string("packages/parser/src/fixtures/hello-world.php")
         .expect("Failed to read the file");
     let file = PHPParser::parse(Rule::FILE, &file_content).expect("Failed to parse");
-
-    eprintln!("file = {:#?}", file);
-
     let pretty_string = format!("{:#?}", file);
-    let json: Value = json!(file);
-    let pretty_json = serde_json::to_string_pretty(&json).expect("failed to strngify json");
+    // let json: Value = json!(SerializablePairs(file));
+    // let pretty_json = serde_json::to_string_pretty(&json).expect("failed to strngify json");
 
-    _ = fs::write("pest-output.txt", pretty_string);
-    _ = fs::write("output-output.json", pretty_json);
+    let output_path = Path::new("output");
+
+    create_dir_all(output_path).expect("Failed to create output path");
+
+    fs::write(output_path.join("pairs.txt"), pretty_string).expect("Failed to write `pairs.txt`");
+    // _ = fs::write("output/pairs.json", pretty_json);
 }
