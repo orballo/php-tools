@@ -1,0 +1,15 @@
+---
+source: packages/parser/tests/lexical_grammar.rs
+expression: nowdoc_strings
+input_file: packages/parser/tests/fixtures/strings_single_quoted.php
+---
+- rule: Single Quoted String
+  content: "'This is a single quoted string literal'"
+- rule: Single Quoted String
+  content: "'This is a single quoted string literal with an escaped single quote: \\''"
+- rule: Single Quoted String
+  content: "'This is a single quoted string literal with an escaped backslash: \\\\'"
+- rule: Single Quoted String
+  content: "'This is a single quoted string literal with a newline: \\n'"
+- rule: Single Quoted String
+  content: "b'This is a single quoted binary string literal'"
