@@ -17,4 +17,4 @@ target/
 vendor/
 
 # Pest
-/output/
+output/
