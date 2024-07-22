@@ -1,0 +1,45 @@
+---
+source: packages/parser/tests/literals.rs
+expression: literals
+input_file: packages/parser/tests/fixtures/single_quoted_string_literals.php
+---
+- name: Simple string
+  content: "'This is a single-quoted string.'"
+  line: 4
+  length: 33
+- name: Numeric string
+  content: "'1234567890'"
+  line: 6
+  length: 12
+- name: Special characters
+  content: "'Special characters: \"!@#$%^&*()_+-=[]{}|;:,.<>/?'"
+  line: 8
+  length: 50
+- name: Escape sequences
+  content: "'Escape sequences: \\n \\t'"
+  line: 10
+  length: 25
+- name: Quotes inside
+  content: "'Quotes inside: \\'single-quoted\\''"
+  line: 12
+  length: 34
+- name: Multiline string
+  content: "'Multiline\nstring'"
+  line: 14
+  length: 18
+- name: Unicode string
+  content: "'Unicode characters: \\u{1F600} \\u{1F34E}'"
+  line: 17
+  length: 41
+- name: Escaped backslash
+  content: "'String with backslash at the end: \\\\'"
+  line: 19
+  length: 38
+- name: Empty string
+  content: "''"
+  line: 21
+  length: 2
+- name: Indented multiline string
+  content: "'Multiline\n            indented'"
+  line: 23
+  length: 32

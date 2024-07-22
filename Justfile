@@ -5,7 +5,7 @@
     cargo test \
     --package parser \
     --no-fail-fast \
-    --test lexical_grammar
+    --test literals
 
 @review:
     cargo insta review

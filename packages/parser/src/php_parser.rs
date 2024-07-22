@@ -2,9 +2,9 @@ use pest_derive::Parser;
 
 #[derive(Parser)]
 #[grammar = "grammar/base.pest"]
-#[grammar = "grammar/lexical/keywords.pest"]
-#[grammar = "grammar/lexical/operators.pest"]
-#[grammar = "grammar/lexical/punctuators.pest"]
-#[grammar = "grammar/lexical/names.pest"]
-#[grammar = "grammar/lexical/literals.pest"]
+#[grammar = "grammar/keywords.pest"]
+#[grammar = "grammar/operators.pest"]
+#[grammar = "grammar/punctuators.pest"]
+#[grammar = "grammar/names.pest"]
+#[grammar = "grammar/literals.pest"]
 pub struct PHPParser {}

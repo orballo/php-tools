@@ -1,6 +1,6 @@
 // Defines the structure of a PHP script
 
-SCRIPT = @{ SOI ~ TEXT? ~ (SCRIPT_SECTION ~ TEXT?)+ ~ EOI }
+SCRIPT = _{ SOI ~ TEXT? ~ (SCRIPT_SECTION ~ TEXT?)+ ~ EOI }
 
 // Arbitrary text outside of PHP tags
 
@@ -23,10 +23,10 @@ SCRIPT_ELEMENT  = _{
 
 // Comments
 
-COMMENT                   = _{ SINGLE_LINE_COMMENT | SINGLE_LINE_SHELL_COMMENT | DELIMITED_COMMENT }
-SINGLE_LINE_COMMENT       = @{ "//" ~ (!NEWLINE ~ !CLOSE_TAG ~ ANY)* }
-SINGLE_LINE_SHELL_COMMENT = @{ "#" ~ (!NEWLINE ~ !CLOSE_TAG ~ ANY)* }
-DELIMITED_COMMENT         = @{ "/*" ~ (!"*/" ~ ANY)* ~ "*/" }
+COMMENT             = _{ SINGLE_LINE_COMMENT | SHELL_COMMENT | DELIMITED_COMMENT }
+SINGLE_LINE_COMMENT = ${ "//" ~ (!NEWLINE ~ !CLOSE_TAG ~ ANY)* }
+SHELL_COMMENT       = ${ "#" ~ (!NEWLINE ~ !CLOSE_TAG ~ ANY)* }
+DELIMITED_COMMENT   = ${ "/*" ~ (!"*/" ~ ANY)* ~ "*/" }
 
 // Whitespace
 
