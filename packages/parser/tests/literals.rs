@@ -20,3 +20,33 @@ fn single_quoted_string_literal() {
         })
     });
 }
+
+#[test]
+fn double_quoted_string_literal() {
+    glob!("fixtures/double_quoted_string_literals.php", |path| {
+        let file = fs::read_to_string(path).unwrap();
+        let pairs = PHPParser::parse(PHPRule::SCRIPT, &file)
+            .expect("Something went wrong parsing the file");
+        let literals = Extractor::default()
+            .extract_nodes(pairs, PHPRule::DOUBLE_QUOTED_STRING_LITERAL);
+
+        with_settings!({prepend_module_to_snapshot => false}, {
+            insta::assert_yaml_snapshot!(literals);
+        })
+    });
+}
+
+#[test]
+fn heredoc_string_literal() {
+    glob!("fixtures/heredoc_string_literals.php", |path| {
+        let file = fs::read_to_string(path).unwrap();
+        let pairs = PHPParser::parse(PHPRule::SCRIPT, &file)
+            .expect("Something went wrong parsing the file");
+        let literals = Extractor::default()
+            .extract_nodes(pairs, PHPRule::HEREDOC_STRING_LITERAL);
+
+        with_settings!({prepend_module_to_snapshot => false}, {
+            insta::assert_yaml_snapshot!(literals);
+        })
+    });
+}

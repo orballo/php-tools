@@ -1,0 +1,41 @@
+---
+source: packages/parser/tests/literals.rs
+expression: literals
+input_file: packages/parser/tests/fixtures/double_quoted_string_literals.php
+---
+- name: Simple string
+  content: "\"This is a double quoted string literal\""
+  line: 4
+  length: 40
+- name: String with common escape sequences
+  content: "\"\\\\ \\\" \\$ \\e \\f \\n \\r \\t \\v\""
+  line: 6
+  length: 28
+- name: String with octal escape sequences
+  content: "\"\\7 \\77 \\777\""
+  line: 8
+  length: 13
+- name: String with hexadecimal escape sequences
+  content: "\"\\x8 \\xFF\""
+  line: 10
+  length: 10
+- name: String with unicode escape sequences
+  content: "\"\\u{91223} \\u{00CCFF} \\u{1}\""
+  line: 12
+  length: 28
+- name: String with literal special characters
+  content: "\"\\$efnrtv\""
+  line: 14
+  length: 10
+- name: String with final backslash
+  content: "\"\\\\\""
+  line: 16
+  length: 4
+- name: Empty string
+  content: "\"\""
+  line: 18
+  length: 2
+- name: String with variable
+  content: "\"variable: $foo\""
+  line: 20
+  length: 16
