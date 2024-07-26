@@ -1,20 +1,20 @@
 [package]
-name              = "parser"
+name = "parser"
 version.workspace = true
 authors.workspace = true
 edition.workspace = true
 license.workspace = true
 
 [dependencies]
-pest.workspace        = true
-pest_derive.workspace = true
-rowan.workspace       = true
-serde.workspace       = true
-serde_json.workspace  = true
+rowan.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+logos.workspace = true
+nom.workspace = true
 
 [dev-dependencies]
 insta.workspace = true
 
 [profile.dev.package]
-insta.opt-level   = 3
+insta.opt-level = 3
 similar.opt-level = 3

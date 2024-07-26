@@ -1,5 +1,5 @@
 [workspace]
-members  = ["packages/parser"]
+members = ["packages/parser"]
 resolver = "2"
 
 [workspace.package]
@@ -9,9 +9,9 @@ edition = "2021"
 license = "MIT"
 
 [workspace.dependencies]
-pest        = { version = "2.7.11", features = ["pretty-print"] }
-pest_derive = "2.7.11"
-rowan       = "0.15.15"
-serde       = { version = "1.0.204", features = ["derive"] }
-serde_json  = "1.0.120"
-insta       = { version = "1.39.0", features = ["yaml", "glob"] }
+rowan = "0.15.15"
+serde = { version = "1.0.204", features = ["derive"] }
+serde_json = "1.0.120"
+insta = { version = "1.39.0", features = ["yaml", "glob"] }
+logos = "0.14.0"
+nom = "7.1.3"

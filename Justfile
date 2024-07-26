@@ -1,6 +1,9 @@
 @default:
     just --list
 
+@run:
+    cargo run --package parser
+
 @test:
     cargo test \
     --package parser \

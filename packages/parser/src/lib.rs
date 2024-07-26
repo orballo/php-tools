@@ -1,3 +1,3 @@
-pub mod php_parser;
-
-pub use php_parser::{PHPParser, Rule as PHPRule};
+pub mod ast;
+pub mod lexer;
+pub mod parser;
