@@ -213,7 +213,6 @@ version = "0.1.0"
 dependencies = [
  "insta",
  "lexer",
- "lexer_derive",
  "nom",
  "rowan",
  "serde",

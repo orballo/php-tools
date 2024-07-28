@@ -1,5 +1,6 @@
-use parser::ast::SyntaxKind;
+use lexer::lex;
 
 fn main() {
-    dbg!(SyntaxKind::Expr);
+    let php = "<?php echo \"Hello World\"; ?>";
+    let tokens = lex(php);
 }
