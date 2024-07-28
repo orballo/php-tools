@@ -2,7 +2,7 @@ use logos::Logos;
 
 #[derive(Logos, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[repr(u16)]
-pub enum Token<'source> {
+pub enum Token {
     #[token("<?")]
     OpenTag,
 
@@ -43,10 +43,10 @@ pub enum Token<'source> {
     Assign,
 
     #[regex(r"[+-]?(:?0|[1-9][0-9]*)")]
-    Integer(&'source str),
+    Integer,
 
-    #[regex(r"'(?:[^'\\]|\\.)*'", |lex| lex.slice().trim_matches('\''))]
-    String(&'source str),
+    #[regex(r"'(?:[^'\\]|\\.)*'")]
+    String,
 
     #[token("true")]
     True,
@@ -61,8 +61,8 @@ pub enum Token<'source> {
     Echo,
 
     #[token(r"$[_a-zA-Z][_a-zA-Z0-9]*")]
-    Variable(&'source str),
+    Variable,
 
     #[token(r"[_a-zA-Z][_a-zA-Z0-9]*")]
-    Identifier(&'source str),
+    Identifier,
 }

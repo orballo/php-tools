@@ -110,6 +110,22 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bbd2bcb4c963f2ddae06a2efc7e9f3591312473c50c6685e1f298068316e66fe"
 
 [[package]]
+name = "lexer"
+version = "0.1.0"
+dependencies = [
+ "logos",
+]
+
+[[package]]
+name = "lexer_derive"
+version = "0.1.0"
+dependencies = [
+ "lexer",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "libc"
 version = "0.2.155"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -196,7 +212,8 @@ name = "parser"
 version = "0.1.0"
 dependencies = [
  "insta",
- "logos",
+ "lexer",
+ "lexer_derive",
  "nom",
  "rowan",
  "serde",
@@ -311,9 +328,9 @@ checksum = "fa42c91313f1d05da9b26f267f931cf178d4aba455b4c4622dd7355eb80c6640"
 
 [[package]]
 name = "syn"
-version = "2.0.71"
+version = "2.0.72"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b146dcf730474b4bcd16c311627b31ede9ab149045db4d6088b3becaea046462"
+checksum = "dc4b9b9bf2add8093d3f2c0204471e951b2285580335de42f9d2534f3ae7a8af"
 dependencies = [
  "proc-macro2",
  "quote",

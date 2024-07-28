@@ -23,6 +23,7 @@ This project is in the very very very early stages of development, currently bui
 
 Main tech used:
 
+- [`logos`](https://crates.io/crates/logos) for lexing
 - [`nom`](https://crates.io/crates/nom) for parsing
 - [`rowan`](https://crates.io/crates/rowan) for AST building
 
