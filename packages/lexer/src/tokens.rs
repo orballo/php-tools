@@ -1,6 +1,6 @@
 use logos::Logos;
 
-#[derive(Logos, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Logos, Debug)]
 #[repr(u16)]
 pub enum Token {
     #[token("<?")]

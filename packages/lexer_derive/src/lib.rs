@@ -1,57 +1,60 @@
 use proc_macro::TokenStream;
 use quote::quote;
-use syn::{parse_macro_input, Attribute, DeriveInput, ItemEnum, Path};
+use std::fs;
+use std::path::{Path, PathBuf};
+use syn::{parse_macro_input, parse_str};
 
-#[proc_macro_derive(Tokens, attributes(tokens_from))]
-pub fn tokens_derive(input: TokenStream) -> TokenStream {
-    let input = parse_macro_input!(input as DeriveInput);
-    let name = &input.ident;
+#[proc_macro_attribute]
+pub fn add_tokens(_attr: TokenStream, input: TokenStream) -> TokenStream {
+    let root = env!("CARGO_MANIFEST_DIR");
+    let tokens_enum_path = Path::new(root).join("../lexer/src/tokens.rs");
+    let tokens_enum = extract_tokens_enum_from_file(tokens_enum_path);
+    let tokens_enum_variants = extract_enum_variants(tokens_enum.variants);
 
-    dbg!(&name);
+    let base_enum = parse_macro_input!(input as syn::ItemEnum);
+    let base_enum_name = &base_enum.ident;
+    let base_enum_variants = extract_enum_variants(base_enum.variants);
 
-    let tokens_from = input
-        .attrs
-        .iter()
-        .find(|attr| attr.path().is_ident("tokens_from"))
-        .expect("Attribute 'tokens_from' is missing");
+    let output = quote! {
+        #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+        #[repr(u16)]
+        pub enum #base_enum_name {
+            #(#tokens_enum_variants,)*
+            #(#base_enum_variants,)*
+        }
+    };
 
-    let tokens_enum_ident = extract_tokens_enum_ident(tokens_from);
-
-    dbg!(&tokens_enum_ident);
-
-    // @TODO: I need to setup a builr.rs file in `parser` to set
-    // an env var with the path to the lexer enum.
-    //
-    // Also we can try to make the parser enum to know of the lexer
-    // through a method. and that somehow that brings both enums
-    // data into the proc macro.
-
-    let tokens_enum: ItemEnum = syn::parse2(quote! {
-        #tokens_enum_ident
-    })
-    .expect("Failed to parse tokens enum");
-
-    dbg!(&tokens_enum);
-
-    TokenStream::new()
+    output.into()
 }
 
-fn extract_tokens_enum_ident(tokens_from: &Attribute) -> String {
-    let argument = tokens_from
-        .parse_args::<Path>()
-        .expect("Failed to parse 'tokens_from' argument");
+fn extract_tokens_enum_from_file(file_path: PathBuf) -> syn::ItemEnum {
+    if !file_path.exists() {
+        panic!("Tokens file does not exist");
+    }
 
-    let tokens_enum =
-        argument
-            .segments
-            .into_pairs()
-            .fold(String::new(), |path, pair| {
-                let (segment, separator) = pair.into_tuple();
-                let segment = segment.ident.to_string();
-                let separator = separator.map_or("", |_| "::");
+    let file_path = file_path.to_str().unwrap();
+    let file =
+        fs::read_to_string(file_path).expect("Failed to read tokens file");
+    let parsed_file =
+        parse_str::<syn::File>(&file).expect("Failed to parse tokens file");
 
-                format!("{}{}{}", path, segment, separator)
-            });
+    let tokens_enum = parsed_file
+        .items
+        .into_iter()
+        .find_map(|item| {
+            if let syn::Item::Enum(item_enum) = item {
+                return Some(item_enum);
+            } else {
+                None
+            }
+        })
+        .expect("Failed to find enum in tokens file");
 
     tokens_enum
+}
+
+fn extract_enum_variants(
+    variants: syn::punctuated::Punctuated<syn::Variant, syn::token::Comma>,
+) -> Vec<syn::Ident> {
+    variants.into_iter().map(|variant| variant.ident).collect()
 }

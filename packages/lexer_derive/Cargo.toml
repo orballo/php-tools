@@ -11,4 +11,3 @@ proc-macro = true
 [dependencies]
 syn.workspace = true
 quote.workspace = true
-lexer.path = "../lexer"
