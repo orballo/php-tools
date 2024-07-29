@@ -7,6 +7,14 @@ pub use derive::add_tokens;
 pub use logos::Lexer;
 pub use tokens::Token;
 
-pub fn lex<'source>(file_content: &'source str) -> Lexer<'source, Token> {
-    Token::lexer(file_content)
+pub struct PHPLexer {}
+
+impl<'source> PHPLexer {
+    pub fn new() -> Self {
+        Self {}
+    }
+
+    pub fn lex(&self, file_content: &'source str) -> Lexer<'source, Token> {
+        Token::lexer(file_content)
+    }
 }

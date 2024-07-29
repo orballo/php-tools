@@ -3,7 +3,7 @@ use logos::Logos;
 #[derive(Logos, Debug)]
 #[repr(u16)]
 pub enum Token {
-    #[token("<?")]
+    #[token("<?php")]
     OpenTag,
 
     #[token("?>")]
