@@ -9,8 +9,7 @@ license.workspace = true
 rowan.workspace = true
 serde.workspace = true
 serde_json.workspace = true
-nom.workspace = true
-lexer.path = "../lexer"
+chumsky.workspace = true
 
 [dev-dependencies]
 insta.workspace = true
