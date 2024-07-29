@@ -5,14 +5,6 @@
 //
 // The text sections could potentially accept extensions to parse HTML, etc.
 
-pub struct Parser {}
-
-impl Parser {
-    pub fn builder() -> ParserBuilder {
-        ParserBuilder::new()
-    }
-}
-
 // @TODO: We need to implement a Token struct.
 // This struct is going to be used to store token kinds
 // with their name, span, and &str to source.
@@ -32,27 +24,56 @@ impl Parser {
 // - Statement definition and parser (Optional)
 // - Bytecode instruction definition (Optional)
 // - Bytecode instruction parser (Optional)
-//
-pub struct ParserBuilder {
-    tokens: Vec<Token>,
-    parsers: Vec<Box<dyn SubParser>>,
+
+#[repr(u16)]
+pub enum Script {
+    Root,
+    Text,
+    Section,
 }
 
-impl ParserBuilder {
+#[repr(u16)]
+pub enum SyntaxKind {
+    Statement,
+    Expression,
+    Token,
+}
+
+pub struct PHPParser {}
+
+impl<'source> PHPParser {
+    pub fn builder() -> PHPParserBuilder<'source> {
+        PHPParserBuilder::new()
+    }
+}
+
+pub struct PHPParserBuilder<'source> {
+    _parsers: Vec<Box<dyn Parser<'source, Kind = SyntaxKind>>>,
+}
+
+impl<'source> PHPParserBuilder<'source> {
     pub fn new() -> Self {
         Self {
-            tokens: Vec::new(),
-            parsers: Vec::new(),
+            _parsers: Vec::new(),
         }
     }
 
-    pub fn parser() -> Self {
+    pub fn parser(_parser: Box<dyn Parser<Kind = SyntaxKind>>) -> Self {
         todo!()
     }
 
-    pub fn parsers() -> Self {
+    pub fn parsers(_parsers: Vec<Box<dyn Parser<Kind = SyntaxKind>>>) -> Self {
+        todo!()
+    }
+
+    pub fn build(self) -> PHPParser {
         todo!()
     }
 }
 
-pub trait SubParser {}
+pub trait Parser<'source> {
+    type Kind;
+
+    fn parser(&self) -> Box<dyn chumsky::Parser<&'source str, (), Error = chumsky::error::Cheap<&str>>>;
+}
+
