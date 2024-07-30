@@ -39,10 +39,12 @@ pub enum SyntaxKind {
     Token,
 }
 
-pub struct PHPParser {}
+pub struct PHPParser<'source> {
+    _builder: rowan::GreenNodeBuilder<'source>,
+}
 
-impl<'source> PHPParser {
-    pub fn builder() -> PHPParserBuilder<'source> {
+impl<'source> PHPParser<'source> {
+    pub fn new() -> PHPParserBuilder<'source> {
         PHPParserBuilder::new()
     }
 }
@@ -66,7 +68,7 @@ impl<'source> PHPParserBuilder<'source> {
         todo!()
     }
 
-    pub fn build(self) -> PHPParser {
+    pub fn build(self) -> PHPParser<'source> {
         todo!()
     }
 }
