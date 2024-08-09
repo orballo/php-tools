@@ -1,0 +1,98 @@
+# General
+
+Root = Start ( Use Newline )* ( ( Comment | Rule | Whitespace )? Newline )* End
+
+Use = 'use' ( Identifier* 'from' )? Path
+Path = Quote ( '../' | './' | '/' )? Pathname ( '/' Pathname )* Quote
+Pathname = !'/' Any+
+
+Comment = Hash ( !Newline Any )* Newline
+Rule = Identifier '=' Expression
+Identifier = ( Underscore | Letter ) & ( Underscore | Letter | Decimal )*
+
+# Expressions
+
+ExpressionSequence = Expression+
+ExpressionZeroOrMore = Expression And ZeroOrMore
+ExpressionOneOrMore = Expression And OneOrMore
+ExpressionOptional = Expression And Optional
+ExpressionRepeat = Expression And Repeat
+ExpressionAnd = And Expression
+ExpressionOr = Or Expression
+ExpressionNot = Not Expression
+ExpressionGroup = LeftParen Expression RightParen
+ExpressionLiteral = Quote ( Backslash & Quote | !Quote Any )+ Quote
+ExpressionIdentifier = Identifier
+
+Expression =
+    | ExpressionSequence
+    | ExpressionZeroOrMore
+    | ExpressionOneOrMore
+    | ExpressionOptional
+    | ExpressionRepeat
+    | ExpressionAnd
+    | ExpressionOr
+    | ExpressionNot
+    | ExpressionGroup
+    | ExpressionLiteral
+    | ExpressionIdentifier
+
+# Operators
+
+Assign = '='
+ZeroOrMore = '*'
+OneOrMore = '+'
+Optional = '?'
+Range = '..'
+Repeat = '{' Decimal ( Range Decimal? )?  '}'
+And = '&'
+Or = '|'
+Not = '!'
+
+Operator =
+    | Assign
+    | ZeroOrMore
+    | OneOrMore
+    | Optional
+    | Repeat
+    | And
+    | Or
+    | Not
+
+# Punctuators
+
+LeftParen = '('
+RightParen = ')'
+LeftBracket = '['
+RightBracket = ']'
+LeftBrace = '{'
+RightBrace = '}'
+Quote = '\''
+Hash = '#'
+
+Punctuator =
+    | LeftParen
+    | RightParen
+    | LeftBracket
+    | RightBracket
+    | LeftBrace
+    | RightBrace
+    | Backslash
+    | Quote
+    | Hash
+
+# Characters
+
+Whitespace = ' ' | '\t'
+Newline = '\r\n' | '\n'
+Dot = '.'
+Backslash = '\'
+Underscore = '_'
+Dash = '-'
+Letter = 'a'..'z' | 'A'..'Z'
+Binary = '0'..'1'
+Octal = '0'..'7'
+Decimal = '0'..'9'
+Hexadecimal = '0'..'9' | 'a'..'f' | 'A'..'F'
+Emoji = '\u2600'..'\u27BF' | '\u2B00'..'\u2BFF' | '\u1F300'..'\u1F64F' | '\u1F680'..'\u1F9FF'
+Any = '\u0000'..'\uFFFF' | '\u10000'..'\u1FFFF'
