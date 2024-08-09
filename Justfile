@@ -2,16 +2,13 @@
     just --list
 
 @run:
-    cargo run --package parser
+    cargo run
 
-@watch:
-    cargo watch -x 'run --package parser'
+@watch :
+    cargo watch -x 'run'
 
 @test:
-    cargo test \
-    --package parser \
-    --no-fail-fast \
-    --test literals
+    cargo test
 
 @review:
     cargo insta review

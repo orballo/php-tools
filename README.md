@@ -21,12 +21,6 @@ Experimental project to improve the tooling for PHP development.
 
 This project is in the very very very early stages of development, currently building the parser.
 
-Main tech used:
-
-- [`logos`](https://crates.io/crates/logos) for lexing
-- [`nom`](https://crates.io/crates/nom) for parsing
-- [`rowan`](https://crates.io/crates/rowan) for AST building
-
 ## Goals:
 
 Inspired by Rust's ecosystem tools such as `rustc` and `rust-analyze`:
